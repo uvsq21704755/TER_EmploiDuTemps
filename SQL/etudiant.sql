@@ -88,7 +88,7 @@ INSERT INTO Etudiant VALUES('21808685','Odette','Alfred','M1 DATASCALE');
 INSERT INTO Etudiant VALUES('21800989','Gillet','Elodie','M1 AMIS');
 INSERT INTO Etudiant VALUES('21807527','Garnier','Thérèse','M1 SECRETS');
 INSERT INTO Etudiant VALUES('21809974','Olivier','Laurence','M1 RESEAUX');
-INSERT INTO Etudiant VALUES('21809974','Bouvet','Hélène','M1 DATASCALE');
+INSERT INTO Etudiant VALUES('21809975','Bouvet','Hélène','M1 DATASCALE');
 INSERT INTO Etudiant VALUES('21809776','Payet','Valentine','M1 SECRETS');
 INSERT INTO Etudiant VALUES('21808097','Vidal','Clémence','M1 AMIS');
 INSERT INTO Etudiant VALUES('21800184','Cohen','Maëlle','M1 RESEAUX');
