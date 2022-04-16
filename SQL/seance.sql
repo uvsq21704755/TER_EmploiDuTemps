@@ -1,24 +1,43 @@
+-- Création de la table Enseignant --
+
 CREATE table Seance
 (
 	NumSeance Int PRIMARY KEY NOT NULL,
-	Jour Varchar(50),
-	HeureDebut Varchar(5),
-	HeureFin Varchar(5),
+	NumGroupe int,
+	CodeModule varchar(10),
 	IdEnseignant int,
-	NomSalle varchar(50)
-	FOREIGN KEY(IdEnseignant) REFERENCES Enseignant(num_ens)
-	FOREIGN KEY(NomSalle) REFERENCES Salle(NomSalle)
+	NomSalle varchar(50),
+	IdCreneau int,
+	FOREIGN KEY(CodeModule) REFERENCES Module(Code),
+	FOREIGN KEY(IdEnseignant) REFERENCES Enseignant(IdEnseignant),
+	FOREIGN KEY(NomSalle) REFERENCES Salle(NomSalle),
+	FOREIGN KEY(IdCreneau) REFERENCES Creneau(IdCreneau)
 );
 
-INSERT INTO Seance VALUES(1, 'Mardi', '9h40', '12h50', 85045461, 'Amphi E');
-INSERT INTO Seance VALUES(2, 'Mercredi', '9h40', '12h50', 85028604, 'Amphi E');
-INSERT INTO Seance VALUES(3, 'Vendredi', '9h40', '12h50', 73710800, 'Amphi E');
-INSERT INTO Seance VALUES(4, 'Mardi', '13h50', '18h40', 85045461, 'G105');
-INSERT INTO Seance VALUES(5, 'Mercredi', '13h50', '18h40', 85045461, 'G105');
-INSERT INTO Seance VALUES(6, 'Mercredi', '13h50', '18h40', 85028604, 'JUNGLE');
-INSERT INTO Seance VALUES(7, 'Jeudi', '9h40', '12h50', 81951043, 'Amphi H');
-INSERT INTO Seance VALUES(8, 'Jeudi', '13h50', '18h40', 73710800, 'JUNGLE');
-INSERT INTO Seance VALUES(9, 'Jeudi', '13h50', '18h40', 81951043, 'G203');
-INSERT INTO Seance VALUES(10, 'Jeudi', '13h50', '18h40', 39047430, 'G204');
-INSERT INTO Seance VALUES(11, 'Vendredi', '13h50', '18h40', 85028604, 'ALSACE');
-INSERT INTO Seance VALUES(12, 'Vendredi', '13h50', '18h40', 73710800, 'RC22');
+-- Insertion des tuples --
+
+
+INSERT INTO Seance VALUES(1, null, 'MIN17214', 123456, 'Amphi E', 2); 
+INSERT INTO Seance VALUES(2, null, 'MIN17211', 234567, 'Amphi E', 3);
+INSERT INTO Seance VALUES(3, null, 'MIN17217', 345678, 'Amphi H', 4); 
+INSERT INTO Seance VALUES(4, null, 'MIN17213', 456789, 'Amphi E', 5); 
+INSERT INTO Seance VALUES(5, null, 'MIN17216', 567890 , 'JUNGLE', 1); 
+INSERT INTO Seance VALUES(6, null, 'MIN17215', 678901, 'Amphi F', 3); 
+INSERT INTO Seance VALUES(7, null, 'MIN17218', 789012, 'Amphi E', 4); 
+INSERT INTO Seance VALUES(8, null, 'MIN17212', 890123, 'Amphi F', 5); 
+INSERT INTO Seance VALUES(9, 1, 'MIN17214', 123456, '2205', 7); 
+INSERT INTO Seance VALUES(10, 2, 'MIN17214', 123456, 'G105', 8); 
+INSERT INTO Seance VALUES(11, 1, 'MIN17211', 234567, 'JUNGLE', 8); 
+INSERT INTO Seance VALUES(12, 2, 'MIN17211', 901234, 'ALSACE', 10); 
+INSERT INTO Seance VALUES(13, 1, 'MIN17217', 345678, 'G204', 9); 
+INSERT INTO Seance VALUES(14, 2, 'MIN17217', 987654, 'G205', 9); 
+INSERT INTO Seance VALUES(15, 1, 'MIN17213', 456789, 'JUNGLE', 9); 
+INSERT INTO Seance VALUES(16, 2, 'MIN17213', 456789, 'RC22', 10); 
+INSERT INTO Seance VALUES(17, 1, 'MIN17216', 567890, 'JUNGLE', 6); 
+INSERT INTO Seance VALUES(18, 2, 'MIN17216', 876543, 'ALSACE', 6); 
+INSERT INTO Seance VALUES(19, 1, 'MIN17215', 678901, 'RC28', 8); 
+INSERT INTO Seance VALUES(20, 2, 'MIN17215', 765432, 'RC29', 8); 
+INSERT INTO Seance VALUES(21, 1, 'MIN17218', 789012, 'G002', 7); 
+INSERT INTO Seance VALUES(22, 2, 'MIN17218', 789012, 'RC22', 9); 
+INSERT INTO Seance VALUES(23, 1, 'MIN17212', 890123, 'G205', 14);
+INSERT INTO Seance VALUES(24, 2, 'MIN17212', 890123, 'ALSACE', 10);
