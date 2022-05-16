@@ -239,3 +239,75 @@ def all_seances():
     #for seance in messeances:
     #    seance.affichage()
     return messeances
+
+def matiere_nb_groupe(matiere):
+    try:
+        conn = connexion()
+        cur = conn.cursor()
+        sql = "SELECT Groupes FROM Matiere where Intitule = (%s)"
+        print("Select nombre de groupe d'une matiere")
+        cur.execute(sql,(matiere,))
+        res = cur.fetchall()
+        result = res
+        for tuple in res:
+            for r in tuple:
+                result = r
+        print("Stockage des seances dans une liste")
+        print("Récupération des seances réalisée avec succès")
+        close_connexion(conn, cur)
+
+    except (Exception, psycopg2.Error) as error:
+        print("Erreur lors de la récuperation des nombre de groupes", error)
+
+        # for seance in messeances:
+        #    seance.affichage()
+    return result
+def matiere_nb_eleves(matiere):
+    try:
+        conn = connexion()
+        cur = conn.cursor()
+        sql = "SELECT count(*) FROM Etudiant e,Matiere m,inscrit i where e.NumEtudiant = i.NumEtudiant AND i.CodeModule = m.Code AND m.Intitule = (%s) "
+        print("Select nombre de groupe d'une matiere")
+        cur.execute(sql,(matiere,))
+        res = cur.fetchall()
+        result = res
+        for tuple in res:
+            for r in tuple:
+                result = r
+        print("Stockage des seances dans une liste")
+        print("Récupération des seances réalisée avec succès")
+        close_connexion(conn, cur)
+
+    except (Exception, psycopg2.Error) as error:
+        print("Erreur lors de la récuperation des nombre de groupes", error)
+
+        # for seance in messeances:
+        #    seance.affichage()
+    return result
+
+
+def verif_affectation(matiere,etudiant):
+        try:
+            conn = connexion()
+            cur = conn.cursor()
+            sql = "SELECT count(*) FROM Etudiant e,Matiere m,inscrit i where e.NumEtudiant = i.NumEtudiant AND i.CodeModule = m.Code  AND e.NumEtudiant = {} AND m.Intitule = (%s)  and i.Groupe is not null "
+            print("Select nombre de groupe d'une matiere")
+            cur.execute(sql.format(etudiant), (matiere,))
+            res = cur.fetchall()
+            for tuple in res:
+                for r in tuple:
+                    result =r
+            print("Stockage des seances dans une liste")
+            print("Récupération des seances réalisée avec succès")
+            close_connexion(conn, cur)
+
+        except (Exception, psycopg2.Error) as error:
+            print("Erreur lors de la récuperation des nombre de groupes", error)
+
+            # for seance in messeances:
+            #    seance.affichage()
+
+        if result == 0:
+            return False
+        else:
+            return True

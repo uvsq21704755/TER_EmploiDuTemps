@@ -8,7 +8,7 @@ def connexion():
             password="moulhat",
             host="localhost",
             port="5432",
-            database="EDT"
+            database="Universite"
         )
 
     except (Exception, psycopg2.Error) as error:

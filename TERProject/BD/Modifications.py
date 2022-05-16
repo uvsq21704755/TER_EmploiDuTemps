@@ -14,8 +14,14 @@ def modif_student_inscription(idStudent,groupe,module):
         conn = connexion()
         cur = conn.cursor()
         print("Update groupe étudiant")
-        sql ="UPDATE Inscrit SET Groupe  = {} where NumEtudiant = {} and CodeModule = (%s) "
-        cur.execute(sql.format(groupe,idStudent),(module,))
+        sql = "SELECT Code FROM Matiere where Intitule  = (%s) "
+        cur.execute(sql,(module,))
+        res = cur.fetchall()
+        for tuple in res:
+            for r in tuple:
+                result = r
+        sql1 ="UPDATE Inscrit SET Groupe  = {} where NumEtudiant = {} and CodeModule = (%s) "
+        cur.execute(sql1.format(groupe,idStudent),(r,))
         conn.commit()
         count = cur.rowcount
         print(count,"Groupe d'un étudiant mis à jour avec succès dans la table Inscrit")

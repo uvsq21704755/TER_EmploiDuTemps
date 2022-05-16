@@ -18,7 +18,7 @@ def delete_all():
     try:
         conn = connexion()
         cur = conn.cursor()
-        sql = "truncate table contient,optionsf,enseigne,inscrit, seance, salle, creneau, enseignant, etudiant,  matiere, formation;"
+        sql = "truncate table contient,Optionsf,enseigne,inscrit, seance, salle, creneau, enseignant, etudiant,  matiere, formation;"
         cur.execute(sql)
         conn.commit()
         print("Suppressions avec succès")
