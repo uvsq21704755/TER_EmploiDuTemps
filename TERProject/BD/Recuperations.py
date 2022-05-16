@@ -24,11 +24,15 @@ def all_students():
         cur.execute(sql3)
         res3 = cur.fetchall()
         for tuple in res:
-            sesmatieres  = []
+            sesmatieres1  = []
+            sesmatieres2 = []
             for tuple3 in res3:
                 if tuple3[0] == tuple[0]:
-                    sesmatieres.append(tuple3[1])
-            etudiant = Etudiant(tuple[0],tuple[1],tuple[2],tuple[3],sesmatieres)
+                    if tuple3[1] == 'PGLP' or tuple3[1] == 'Anglais' or tuple3[1] == 'Reseaux Etendus' or tuple3[1] == 'Protocoles IP' or tuple3[1] == 'Simulation' or tuple3[1] == 'Calcul Securise':
+                        sesmatieres1.append(tuple3[1])
+                    if tuple3[1] == 'Conception de BD' or tuple3[1] == 'Tuning de BD' or tuple3[1] == 'Application Web et Securite' or tuple3[1] == 'Methodes de Ranking':
+                        sesmatieres2.append(tuple3[1])
+            etudiant = Etudiant(tuple[0],tuple[1],tuple[2],tuple[3],sesmatieres1,sesmatieres2)
             mesetudiants.append(etudiant)
         print("Récupération des etudiants réalisée avec succès")
         cur.execute(sql2)
@@ -284,8 +288,6 @@ def matiere_nb_eleves(matiere):
         # for seance in messeances:
         #    seance.affichage()
     return result
-
-
 def verif_affectation(matiere,etudiant):
         try:
             conn = connexion()
@@ -311,3 +313,29 @@ def verif_affectation(matiere,etudiant):
             return False
         else:
             return True
+def seances_etudiant(etudiant):
+    try:
+        conn = connexion()
+        cur = conn.cursor()
+        # recupere module et groupe
+        sql = "SELECT ma.Intitule, se.NumGroupe, en.Nom, sa.NomSalle, cr.Jour, cr.Heuredebut, cr.Heurefin, e.Prenom FROM Etudiant e, inscrit i, Matiere ma, salle sa, creneau cr, seance se , enseignant en where e.NumEtudiant = i.NumEtudiant AND i.CodeModule = ma.Code AND e.NumEtudiant = (%s) AND ma.Code = se.CodeModule AND en.IdEnseignant = se.IdEnseignant AND se.NomSalle = sa.NomSalle AND cr.IdCreneau = se.IdCreneau AND i.Groupe = se.NumGroupe  "
+        cur.execute(sql,(etudiant,))
+        res = cur.fetchall()
+        liste_seances = []
+        for tuple in res:
+            item = []
+            item.append(tuple[0])
+            item.append(tuple[4])
+            item.append(tuple[5])
+            item.append(tuple[6])
+            item.append(tuple[7])
+            liste_seances.append(item)
+        print("Récupération des seances réalisée avec succès")
+        close_connexion(conn, cur)
+
+    except (Exception, psycopg2.Error) as error:
+        print("Erreur lors de la récuperation des nombre de groupes", error)
+
+    #for seance in liste_seances:
+    #    print(seance)
+    return liste_seances

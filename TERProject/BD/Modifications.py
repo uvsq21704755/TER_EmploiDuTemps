@@ -9,13 +9,13 @@ from Models.Matiere import Matiere
 from Models.Seance import Seance
 from Models.Groupe import Groupe
 
-def modif_student_inscription(idStudent,groupe,module):
+def modif_student_inscription(idStudent,groupe,intitule_module):
     try:
         conn = connexion()
         cur = conn.cursor()
         print("Update groupe étudiant")
         sql = "SELECT Code FROM Matiere where Intitule  = (%s) "
-        cur.execute(sql,(module,))
+        cur.execute(sql,(intitule_module,))
         res = cur.fetchall()
         for tuple in res:
             for r in tuple:

@@ -90,9 +90,12 @@ def insert_etudiant_inscrit():
         nom = input("Précisez le nom : ")
         prenom = input("Précisez le prenom : ")
         formation = input("Dans quel formation est inscrit cet étudiant : ")
-        listematiere = input(
+        liste1 = input(
             "Précisez la liste des matieres dans lesquelles il est inscrit dans la forme matiere1,matiere2,MAtiere3 ... : ").split(",")
-        etudiants = Etudiant(numetudiant, nom, prenom, formation, listematiere)
+        liste2 = input(
+            "Précisez la liste des matieres dans lesquelles il est inscrit dans la forme matiere1,matiere2,MAtiere3 ... : ").split(
+            ",")
+        etudiants = Etudiant(numetudiant, nom, prenom, formation,liste1,liste2)
         mesetudiants.append(etudiants)
         question = input("Voulez-vous encore rajouter un etudiant ? Répondez par oui ou non : ")
         if (question == "non"):
@@ -105,6 +108,9 @@ def insert_etudiant_inscrit():
         cur = conn.cursor()
         sql = """INSERT INTO Etudiant(NumEtudiant, Nom, Prenom, Formation) VALUES (%s,%s,%s,%s)"""
         for etudiant in mesetudiants:
+            liste = []
+            liste.append(etudiant.get_matieres_s1())
+            liste.append(etudiant.get_matieres_s2())
             value = (etudiant.get_numetudiant(), etudiant.get_nom(), etudiant.get_prenom(), etudiant.get_formation())
             cur.execute(sql, value)
             conn.commit()
