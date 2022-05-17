@@ -49,34 +49,39 @@ def recupInscription():
 
 
 #Fonction tri des modules dans l'ordre imposé
-def ordreModule(module1, module2, module3, module4):
+def ordreModule(modulesNonTries):
     moduleTrie=[]
     for module in ListeModules:
-        if module == module1:
-            moduleTrie.append(module1)
-        if module == module2:
-            moduleTrie.append(module2)
-        if module == module3:
-            moduleTrie.append(module3)
-        if module == module4:
-            moduleTrie.append(module4)
+        if module == modulesNonTries[0]:
+            moduleTrie.append(modulesNonTries[0])
+        if module == modulesNonTries[1]:
+            moduleTrie.append(modulesNonTries[1])
+        if module == modulesNonTries[2]:
+            moduleTrie.append(modulesNonTries[2])
+        if module == modulesNonTries[3]:
+            moduleTrie.append(modulesNonTries[3])
     return moduleTrie
 
 
 #Fonction générant les combinaisons => à virer les combi avec les modules de réseaux
 def generationCombinaisons():
+    modulesNonTries=[];
     j=0
-    listeCombinaisons=np.arange(nombreCombinaisons).reshape(4,16)
+    listeCombinaisons=np.arange(nombreCombinaisons).reshape(16,4)
     for module1 in ListeModules:
         for module2 in ListeModules:
             for module3 in ListeModules:
                 for module4 in ListeModules:
                     if (module1!= module2) & (module1 != module3) & (module1 != module4) & (module2 != module3) & (module2 != module4) & (module3 != module4):
-                        modulesTries=ordreModule(module1, module2, module3, module4)
-                        listeCombinaisons[0][j]=modulesTries[0]
-                        listeCombinaisons[1][j]=modulesTries[1]
-                        listeCombinaisons[2][j]=modulesTries[2]
-                        listeCombinaisons[3][j]=modulesTries[3]
+                        modulesNonTries.append(module1);
+                        modulesNonTries.append(module2);
+                        modulesNonTries.append(module3);
+                        modulesNonTries.append(module4);
+                        modulesTries=ordreModule(modulesNonTries)
+                        listeCombinaisons[j][0]=modulesTries[0]
+                        listeCombinaisons[j][1]=modulesTries[1]
+                        listeCombinaisons[j][2]=modulesTries[2]
+                        listeCombinaisons[j][3]=modulesTries[3]
                         j=j+1
     return listeCombinaisons
 
@@ -93,7 +98,35 @@ def generationCptCombinaisons():
 
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
+    indice=0
+    modulesTrouves=[]
     listeCombinaisons=generationCombinaisons()
     cptCombinaisons=generationCombinaisons()
     Inscriptions=recupInscription()
-    
+    for i in Inscriptions[i][j]:        #parcours etudiant par etudiant
+        for j in Inscriptions[i][j]:          #parcours module par module
+            if Inscriptions[i][j] == 1:
+                modulesTrouves.append(j)
+        modulesTrouves=ordreModule(modulesTrouves)
+        for x in listeCombinaisons[x][]:    #parcours combi par combi
+            if listeCombinaisons[x][]==modulesTrouves:
+                cptCombinaisons[x]=cptCombinaisons[x]+1
+    return cptCombinaisons
+
+
+#Fonction qui va trier dans l'ordre décroissant cptCombinaisons
+def triCptCombinaisons():
+    cptCombinaisons=calculCptCombinaisons()
+
+
+#Fonction qui va trier dans l'ordre décroissant listeCombinaisons
+def triListeCombinaisons():
+
+
+#Fonction qui va selectionner des combi dans la listeCombinaisons contenant un module donné
+
+
+#Algorithme glouton pour remplir les groupes avec la listeCombinaison => pas sur 
+
+
+#Algorithme pour optimiser
