@@ -18,7 +18,7 @@ import numpy as np
 
 
 
-semestreChoisi="S1"
+semestreChoisi="S2"
 nombreCombinaisons=64
 
 #Recup de la liste des etudiants
@@ -36,17 +36,20 @@ def recupInscription():
         for etudiant in ListeEtudiants:
             for module in ListeModules:
                 if(etudiant.get_matieres_s1() == module.get_code()):
-                    Inscription[etudiant][module] = 1
+                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
                 else:
-                    Inscription[etudiant][module] = 0
+                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
+
 
     if(semestreChoisi == "S2"):
         for etudiant in ListeEtudiants:
             for module in ListeModules:
-                if(etudiant.get_matieres_s2() == module.get_code()):
-                    Inscription[etudiant][module] = 1
-                else:
-                    Inscription[etudiant][module] = 0               
+                for x in iter(etudiant.get_matieres_s2()):
+                    if(x == module.get_intitule()):
+                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
+                    else:
+                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
+
     return Inscription
 
 
@@ -105,14 +108,16 @@ def calculCptCombinaisons():
     listeCombinaisons=generationCombinaisons()
     cptCombinaisons=generationCombinaisons()
     Inscriptions=recupInscription()
+    y = 0
     for i in Inscriptions[i][j]:        #parcours etudiant par etudiant
         for j in Inscriptions[i][j]:          #parcours module par module
             if Inscriptions[i][j] == 1:
                 modulesTrouves.append(j)
         modulesTrouves=ordreModule(modulesTrouves)
-        for x in listeCombinaisons[x][]:    #parcours combi par combi
-            if listeCombinaisons[x][]==modulesTrouves:
+        for x in listeCombinaisons[x][y]:    #parcours combi par combi
+            if listeCombinaisons[x][y]==modulesTrouves:
                 cptCombinaisons[x]=cptCombinaisons[x]+1
+                y = y + 1
     return cptCombinaisons
 
 
