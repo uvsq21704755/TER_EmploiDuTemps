@@ -61,14 +61,19 @@ def recupInscription():
 def ordreModule(modulesNonTries):
     moduleTrie=[]
     for module in ListeModules:
-        if module == modulesNonTries[0]:
+        #print("-----")
+        #print(module.get_intitule())
+        #print(modulesNonTries)
+        if module.get_intitule() == modulesNonTries[0]:
             moduleTrie.append(modulesNonTries[0])
-        if module == modulesNonTries[1]:
+        if module.get_intitule() == modulesNonTries[1]:
             moduleTrie.append(modulesNonTries[1])
-        if module == modulesNonTries[2]:
+        if module.get_intitule() == modulesNonTries[2]:
             moduleTrie.append(modulesNonTries[2])
-        if module == modulesNonTries[3]:
+        if module.get_intitule() == modulesNonTries[3]:
             moduleTrie.append(modulesNonTries[3])
+        #print("apres append: "+str(moduleTrie))
+    #print(moduleTrie)    
     return moduleTrie
 
 
@@ -84,25 +89,27 @@ def recupModules(moduleDonne):
 def generationCombinaisons():
     modulesNonTries=[]
     j=0
-    listeCombinaisons=np.arange(nombreCombinaisons).reshape(16,4)
+    k=0
+    #listeCombinaisons=np.arange(5040*4).reshape(4, 5040)
+    #listeCombinaisons = np.chararray((5040,4))
+    #listeCombinaisons = np.empty([5040,4], dtype='S')
+    listeCombinaisons = []
     for module1 in ListeModules:
         for module2 in ListeModules:
             for module3 in ListeModules:
                 for module4 in ListeModules:
-                    if (recupModules(module1) & recupModules(module2) & recupModules(module3) & recupModules(module4)):
-                        if (module1!= module2) & (module1 != module3) & (module1 != module4) & (module2 != module3) & (module2 != module4) & (module3 != module4):
-                            modulesNonTries.append(module1)
-                            modulesNonTries.append(module2)
-                            modulesNonTries.append(module3)
-                            modulesNonTries.append(module4)
+                    if (recupModules(module1.get_intitule()) and recupModules(module2.get_intitule()) and recupModules(module3.get_intitule()) and recupModules(module4.get_intitule())):
+                        if (module1.get_intitule() != module2.get_intitule()) and (module1.get_intitule() != module3.get_intitule()) and (module1.get_intitule() != module4.get_intitule()) and (module2.get_intitule() != module3.get_intitule()) and (module2.get_intitule() != module4.get_intitule()) and (module3.get_intitule() != module4.get_intitule()):
+                            modulesNonTries.append(module1.get_intitule())
+                            modulesNonTries.append(module2.get_intitule())
+                            modulesNonTries.append(module3.get_intitule())
+                            modulesNonTries.append(module4.get_intitule())
                             modulesTries=ordreModule(modulesNonTries)
-                            listeCombinaisons[j][0]=modulesTries[0]
-                            listeCombinaisons[j][1]=modulesTries[1]
-                            listeCombinaisons[j][2]=modulesTries[2]
-                            listeCombinaisons[j][3]=modulesTries[3]
-                            j=j+1
-    return listeCombinaisons
+                            listeCombinaisons.append(modulesTries)
 
+                            j=j+1
+
+    return listeCombinaisons
 
 #Fonction générant le cptCombinaisons (effectif d'etudiants pour chacun des combinaisons)
 def generationCptCombinaisons():
