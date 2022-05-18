@@ -19,7 +19,7 @@ import numpy as np
 
 
 semestreChoisi="S2"
-nombreCombinaisons=64
+nombreCombinaisons=5040
 
 #Recup de la liste des etudiants
 ListeEtudiants=all_students()
@@ -32,28 +32,45 @@ ListeModules=all_modules()
 #Recup des seances
 ListeSeances=all_seances()
 
+##### Fonction pour récupérer les matières de semestre demandé en paramètre
 
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
-    Inscription = np.arange(len(ListeEtudiants)*len(ListeModules)).reshape(len(ListeEtudiants), len(ListeModules))
-    if(semestreChoisi == "S1"):
-        for etudiant in ListeEtudiants:
-            for module in ListeModules:
-                if(etudiant.get_matieres_s1() == module.get_code()):
-                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
-                else:
-                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
 
+    Inscription = [] 
+
+    counterInscription = 0
+    if(semestreChoisi == "S1"):
+        
+        for etudiant in ListeEtudiants:
+        
+            for module in ListeModules:
+            
+                for x in etudiant.get_matieres_s1():
+                
+                    if(x == module.get_intitule()):
+                        Inscription.append(1)
+                    else:
+                        Inscription.append(0)
 
     if(semestreChoisi == "S2"):
+       
         for etudiant in ListeEtudiants:
+            
+            print(str(etudiant.affichage()))
             for module in ListeModules:
-                for x in iter(etudiant.get_matieres_s2()):
+            
+                for x in etudiant.get_matieres_s2():
+                
                     if(x == module.get_intitule()):
-                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
+                        print("x: " + x + " -- module.get_intitule " + str(module.get_intitule()))
+                        Inscription.append(1)
+                        counterInscription = counterInscription + 1
                     else:
-                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
-
+                        Inscription.append(0)
+            print("Etudiant numero: " + str(etudiant.get_numetudiant()) + "- Counter d'inscriptions" + str(counterInscription))
+            counterInscription = 0
+    
     return Inscription
 
 
@@ -107,35 +124,38 @@ def generationCombinaisons():
                             modulesNonTries.remove(module4.get_intitule())
     return listeCombinaisons
 
-#Fonction générant le cptCombinaisons (effectif d'etudiants pour chacun des combinaisons)
-def generationCptCombinaisons():
-    cptCombinaisons=[]
-    i=0
-    while(i < nombreCombinaisons):
-        cptCombinaisons[i]=0
-        i=i+1
-    return cptCombinaisons
-
-
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
-    indice=0
+    cptCombinaisons = []
+    cpt=0
+    while(cpt < nombreCombinaisons):
+        cptCombinaisons.append(0)
+        cpt=cpt+1
     modulesTrouves=[]
     listeCombinaisons=generationCombinaisons()
-    cptCombinaisons=generationCombinaisons()
     Inscriptions=recupInscription()
-    y = 0
-    for i in Inscriptions[i][j]:        #parcours etudiant par etudiant
-        for j in Inscriptions[i][j]:          #parcours module par module
-            if Inscriptions[i][j] == 1:
-                modulesTrouves.append(j)
-        modulesTrouves=ordreModule(modulesTrouves)
-        for x in listeCombinaisons[x][y]:    #parcours combi par combi
-            if listeCombinaisons[x][y]==modulesTrouves:
-                cptCombinaisons[x]=cptCombinaisons[x]+1
-                y = y + 1
-    return cptCombinaisons
+    x=0
+    y=0
+    dd=0
+    for x in Inscriptions:
+        for y in Inscriptions:
+            if y == 1:
+                dd=dd+1
 
+    print(dd)
+    y = 0
+    i=0
+    j=0
+    for i in Inscriptions:
+        for j in Inscriptions:
+            if Inscriptions==1:
+                modulesTrouves.append(j)
+            modulesTrouves=ordreModule(modulesTrouves)
+            for x in listeCombinaisons:    #parcours combi par combi
+                if x==modulesTrouves:
+                    cptCombinaisons[x]=cptCombinaisons[x]+1
+                    y = y + 1
+    return cptCombinaisons
 
 #Fonction qui va trier dans l'ordre décroissant cptCombinaisons
 def triCptCombinaisons():
