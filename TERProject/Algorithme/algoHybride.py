@@ -88,11 +88,6 @@ def recupModules(moduleDonne):
 #Fonction générant les combinaisons => à virer les combi avec les modules de réseaux
 def generationCombinaisons():
     modulesNonTries=[]
-    j=0
-    k=0
-    #listeCombinaisons=np.arange(5040*4).reshape(4, 5040)
-    #listeCombinaisons = np.chararray((5040,4))
-    #listeCombinaisons = np.empty([5040,4], dtype='S')
     listeCombinaisons = []
     for module1 in ListeModules:
         for module2 in ListeModules:
@@ -106,9 +101,10 @@ def generationCombinaisons():
                             modulesNonTries.append(module4.get_intitule())
                             modulesTries=ordreModule(modulesNonTries)
                             listeCombinaisons.append(modulesTries)
-
-                            j=j+1
-
+                            modulesNonTries.remove(module1.get_intitule())
+                            modulesNonTries.remove(module2.get_intitule())
+                            modulesNonTries.remove(module3.get_intitule())
+                            modulesNonTries.remove(module4.get_intitule())
     return listeCombinaisons
 
 #Fonction générant le cptCombinaisons (effectif d'etudiants pour chacun des combinaisons)
