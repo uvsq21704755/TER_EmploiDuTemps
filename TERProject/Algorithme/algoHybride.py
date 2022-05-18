@@ -16,6 +16,8 @@ from BD.Recuperations import (all_students,all_instructor,all_formations,all_mod
 from BD.Modifications import modif_student_inscription
 import numpy as np
 
+
+
 semestreChoisi="S1"
 nombreCombinaisons=64
 
@@ -117,16 +119,51 @@ def calculCptCombinaisons():
 #Fonction qui va trier dans l'ordre décroissant cptCombinaisons
 def triCptCombinaisons():
     cptCombinaisons=calculCptCombinaisons()
+    newCptCombinaisons=[]
+    max = 0
+    for y in cptCombinaisons:
+        for x in cptCombinaisons:
+            if x > max:
+                max = x
+        newCptCombinaisons.append(x)
+    return newCptCombinaisons
 
 
 #Fonction qui va trier dans l'ordre décroissant listeCombinaisons
 def triListeCombinaisons():
+    listeCombinaisons=generationCombinaisons()
+    cptCombinaisons=calculCptCombinaisons()
+    newCptCombinaisons=[]
+    newListeCombinaisons=[]
+    max = 0
+    for y in cptCombinaisons:
+        for x in cptCombinaisons:
+            if x > max:
+                max = x
+        newCptCombinaisons.append(x)
+        for i in listeCombinaisons[x][i]:
+            newListeCombinaisons.append(listeCombinaisons[x][i])
+    return newListeCombinaisons
 
 
 #Fonction qui va selectionner des combi dans la listeCombinaisons contenant un module donné
+def selectionListeCombinaisons(moduleDonne):
+    listeCombinaisons=triListeCombinaisons()
+    newListeIndex=[]
+    newListeCombinaisons=np.arange(nombreCombinaisons).reshape(16,4)
+    for x in listeCombinaisons[x][y]:
+        for y in listeCombinaisons[x][y]:
+            if y == moduleDonne:
+                newListeIndex.append(x)
+    for x in listeCombinaisons[x][y]:
+        for y in listeCombinaisons[x][y]:
+            for k in newListeIndex:
+                if x == k:
+                    newListeCombinaisons.append(listeCombinaisons[x][y])
+    return newListeCombinaisons
 
 
-#Algorithme glouton pour remplir les groupes avec la listeCombinaison => pas sur 
+#Algorithme glouton pour remplir les groupes avec la listeCombinaison
 
 
 #Algorithme pour optimiser
