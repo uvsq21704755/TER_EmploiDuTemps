@@ -29,6 +29,10 @@ ListeEtudiants=all_students()
 ListeModules=all_modules()
 
 
+#Recup des seances
+ListeSeances=all_seances()
+
+
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
     Inscription = np.arange(len(ListeEtudiants)*len(ListeModules)).reshape(len(ListeEtudiants), len(ListeModules))
@@ -68,26 +72,35 @@ def ordreModule(modulesNonTries):
     return moduleTrie
 
 
+#Fonction qui récupère seulement les modules
+def recupModules(moduleDonne):
+    for x in ListeSeances:
+        if moduleDonne == x.get_matiere():
+            return True
+    return False
+
+
 #Fonction générant les combinaisons => à virer les combi avec les modules de réseaux
 def generationCombinaisons():
-    modulesNonTries=[];
+    modulesNonTries=[]
     j=0
     listeCombinaisons=np.arange(nombreCombinaisons).reshape(16,4)
     for module1 in ListeModules:
         for module2 in ListeModules:
             for module3 in ListeModules:
                 for module4 in ListeModules:
-                    if (module1!= module2) & (module1 != module3) & (module1 != module4) & (module2 != module3) & (module2 != module4) & (module3 != module4):
-                        modulesNonTries.append(module1);
-                        modulesNonTries.append(module2);
-                        modulesNonTries.append(module3);
-                        modulesNonTries.append(module4);
-                        modulesTries=ordreModule(modulesNonTries)
-                        listeCombinaisons[j][0]=modulesTries[0]
-                        listeCombinaisons[j][1]=modulesTries[1]
-                        listeCombinaisons[j][2]=modulesTries[2]
-                        listeCombinaisons[j][3]=modulesTries[3]
-                        j=j+1
+                    if (recupModules(module1) & recupModules(module2) & recupModules(module3) & recupModules(module4)):
+                        if (module1!= module2) & (module1 != module3) & (module1 != module4) & (module2 != module3) & (module2 != module4) & (module3 != module4):
+                            modulesNonTries.append(module1)
+                            modulesNonTries.append(module2)
+                            modulesNonTries.append(module3)
+                            modulesNonTries.append(module4)
+                            modulesTries=ordreModule(modulesNonTries)
+                            listeCombinaisons[j][0]=modulesTries[0]
+                            listeCombinaisons[j][1]=modulesTries[1]
+                            listeCombinaisons[j][2]=modulesTries[2]
+                            listeCombinaisons[j][3]=modulesTries[3]
+                            j=j+1
     return listeCombinaisons
 
 
