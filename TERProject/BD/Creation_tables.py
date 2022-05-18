@@ -9,7 +9,7 @@ def create_tables():
         sql = open("script.sql","r").read()
         cur.execute(sql)
         conn.commit()
-        print("Création des tables réalisée avec succès")
+        #print("Création des tables réalisée avec succès")
 
     except (Exception, psycopg2.Error) as error:
         print("Erreur lors de la création des tables", error)
@@ -18,7 +18,7 @@ def delete_all():
     try:
         conn = connexion()
         cur = conn.cursor()
-        sql = "truncate table contient,Optionsf,enseigne,inscrit, seance, salle, creneau, enseignant, etudiant,  matiere, formation;"
+        sql = "truncate table contient,Groupe,Optionsf,enseigne,inscrit, seance, salle, creneau, enseignant, etudiant,  matiere, formation;"
         cur.execute(sql)
         conn.commit()
         print("Suppressions avec succès")

@@ -1311,4 +1311,13 @@ INSERT INTO Seance VALUES(28, 3, 'MSANGS21', 333333, 'G103', 17);
 INSERT INTO Seance VALUES(29, 1, 'MIN17201', 444444, 'JUNGLE', 7);
 INSERT INTO Seance VALUES(30, 2, 'MIN17201', 444444, 'RC22', 8);
 INSERT INTO Seance VALUES(31, 3, 'MIN17201', 444444, 'RC22', 10);
+INSERT INTO Seance VALUES(32, null, 'MIN17201', 444444, 'Amphi D', 2);
 
+CREATE table if not exists Groupe
+(
+	NumGroupe int not null,
+	CodeModule varchar(10) not null,
+	NbEleves int,
+	FOREIGN KEY(CodeModule) REFERENCES Matiere(Code),
+	Primary KEY(NumGroupe,CodeModule)
+);

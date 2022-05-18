@@ -18,7 +18,19 @@ def insertions_bd():
     insert_creneaux()
     insert_salles()
     # insert_seances()
-
+def insert_groupes(listegroupes):
+    try:
+        conn = connexion()
+        cur = conn.cursor()
+        sql = """INSERT INTO Groupe(NumGroupe, CodeModule, NbEleves) VALUES (%s,%s,%s)"""
+        for groupe in listegroupes:
+            value = (groupe.get_numero(), groupe.get_matiere(), groupe.get_nbeleves())
+            cur.execute(sql, value)
+            conn.commit()
+            count = cur.rowcount
+        close_connexion(conn, cur)
+    except (Exception, psycopg2.Error) as error:
+        print("Erreur lors des insertions dans les tables", error)
 def insert_matieres():
     mesmatieres = []
     fin = 0;

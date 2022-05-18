@@ -20,5 +20,5 @@ class Enseignant:
         self.prenom = prenom
     def set_nom(self, nom):
         self.nom = nom
-    def afficher(self):
+    def affichage(self):
         print("L'enseignant : ", self.nom, " ", self.prenom, " ", self.id, " ", self.liste_matieres)

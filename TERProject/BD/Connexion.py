@@ -19,6 +19,5 @@ def connexion():
 def close_connexion(conn, cur):
     cur.close()
     conn.close()
-    print("La connexion PostgreSQL est fermée")
 
 
