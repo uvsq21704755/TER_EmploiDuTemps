@@ -16,8 +16,6 @@ from BD.Recuperations import (all_students,all_instructor,all_formations,all_mod
 from BD.Modifications import modif_student_inscription
 import numpy as np
 
-
-
 semestreChoisi="S2"
 nombreCombinaisons=5040
 
@@ -112,35 +110,70 @@ def ordreModule(modulesNonTries):
     #print(moduleTrie)    
     return moduleTrie
 
-
-#Fonction qui récupère seulement les modules
-def recupModules(moduleDonne):
-    for x in ListeSeances:
-        if moduleDonne == x.get_matiere():
-            return True
-    return False
-
-
 #Fonction générant les combinaisons => à virer les combi avec les modules de réseaux
 def generationCombinaisons():
+    
     modulesNonTries=[]
     listeCombinaisons = []
-    for module1 in ListeModules:
-        for module2 in ListeModules:
-            for module3 in ListeModules:
-                for module4 in ListeModules:
-                    if (recupModules(module1.get_intitule()) and recupModules(module2.get_intitule()) and recupModules(module3.get_intitule()) and recupModules(module4.get_intitule())):
-                        if (module1.get_intitule() != module2.get_intitule()) and (module1.get_intitule() != module3.get_intitule()) and (module1.get_intitule() != module4.get_intitule()) and (module2.get_intitule() != module3.get_intitule()) and (module2.get_intitule() != module4.get_intitule()) and (module3.get_intitule() != module4.get_intitule()):
-                            modulesNonTries.append(module1.get_intitule())
-                            modulesNonTries.append(module2.get_intitule())
-                            modulesNonTries.append(module3.get_intitule())
-                            modulesNonTries.append(module4.get_intitule())
-                            modulesTries=ordreModule(modulesNonTries)
-                            listeCombinaisons.append(modulesTries)
-                            modulesNonTries.remove(module1.get_intitule())
-                            modulesNonTries.remove(module2.get_intitule())
-                            modulesNonTries.remove(module3.get_intitule())
-                            modulesNonTries.remove(module4.get_intitule())
+    ListeModulesSemestre=recupModulesSemestre()
+    
+    #S1
+    if(semestreChoisi == "S1"):
+
+        for module1 in ListeModulesSemestre:
+            
+            for module2 in ListeModulesSemestre:
+                
+                for module3 in ListeModulesSemestre:
+                    
+                    for module4 in ListeModulesSemestre:
+                        
+                        for module5 in ListeModulesSemestre:
+                            
+                            if (module1!=module2) and (module1!=module3) and (module1!=module4) and (module1!=module5) and (module2!=module3) and (module2!=module4) and (module2!=module5) and (module3!=module4) and (module3!=module5) and (module4!=module5):
+
+                                modulesNonTries.append(module1)
+                                modulesNonTries.append(module2)
+                                modulesNonTries.append(module3)
+                                modulesNonTries.append(module4)
+                                modulesNonTries.append(module5)
+                                modulesTries = ordreModule(modulesNonTries)
+
+                                if modulesTries not in listeCombinaisons:
+                                    listeCombinaisons.append(modulesTries)
+
+                                modulesNonTries.remove(module1)
+                                modulesNonTries.remove(module2)
+                                modulesNonTries.remove(module3)
+                                modulesNonTries.remove(module4)
+                                modulesNonTries.remove(module5)
+    #S2
+    if(semestreChoisi == "S2"):
+
+        for module1 in ListeModulesSemestre:
+            
+            for module2 in ListeModulesSemestre:
+                
+                for module3 in ListeModulesSemestre:
+                    
+                    for module4 in ListeModulesSemestre:
+                        
+                        if (module1!=module2) and (module1!=module3) and (module1!=module4) and (module2!=module3) and (module2!=module4) and (module3!=module4):
+
+                            modulesNonTries.append(module1)
+                            modulesNonTries.append(module2)
+                            modulesNonTries.append(module3)
+                            modulesNonTries.append(module4)
+                            modulesTries = ordreModule(modulesNonTries)
+
+                            if modulesTries not in listeCombinaisons:
+                                listeCombinaisons.append(modulesTries)
+
+                            modulesNonTries.remove(module1)
+                            modulesNonTries.remove(module2)
+                            modulesNonTries.remove(module3)
+                            modulesNonTries.remove(module4)
+
     return listeCombinaisons
 
 #Fonction qui incrémente Cpt
