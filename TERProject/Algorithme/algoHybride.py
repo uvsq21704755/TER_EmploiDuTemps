@@ -33,43 +33,62 @@ ListeModules=all_modules()
 ListeSeances=all_seances()
 
 ##### Fonction pour récupérer les matières de semestre demandé en paramètre
+def recupModulesSemestre():
+
+    listeModulesSemestre=[]
+
+    if(semestreChoisi == "S1"):
+        for module in ListeModules:
+            for etudiant in ListeEtudiants:
+                for x in etudiant.get_matieres_s1():
+                    if module.get_intitule() == x:
+                        if module.get_intitule() not in listeModulesSemestre:
+                            listeModulesSemestre.append(module.get_intitule())
+
+    if(semestreChoisi == "S2"):
+        for module in ListeModules:
+            for etudiant in ListeEtudiants:
+                for x in etudiant.get_matieres_s2():
+                    if module.get_intitule() == x:
+                        if module.get_intitule() not in listeModulesSemestre:
+                            listeModulesSemestre.append(module.get_intitule())
+    
+    return listeModulesSemestre    
 
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
 
     Inscription = [] 
+    listeModulesSemestre=recupModulesSemestre()
 
     counterInscription = 0
+    
     if(semestreChoisi == "S1"):
         
         for etudiant in ListeEtudiants:
         
-            for module in ListeModules:
+            for module in listeModulesSemestre:
             
                 for x in etudiant.get_matieres_s1():
                 
-                    if(x == module.get_intitule()):
+                    if(x == module):
                         Inscription.append(1)
                     else:
                         Inscription.append(0)
-
+    
     if(semestreChoisi == "S2"):
        
         for etudiant in ListeEtudiants:
             
-            print(str(etudiant.affichage()))
-            for module in ListeModules:
+            for module in listeModulesSemestre:
             
                 for x in etudiant.get_matieres_s2():
                 
-                    if(x == module.get_intitule()):
-                        print("x: " + x + " -- module.get_intitule " + str(module.get_intitule()))
+                    if(x == module):
                         Inscription.append(1)
                         counterInscription = counterInscription + 1
                     else:
                         Inscription.append(0)
-            print("Etudiant numero: " + str(etudiant.get_numetudiant()) + "- Counter d'inscriptions" + str(counterInscription))
-            counterInscription = 0
     
     return Inscription
 
