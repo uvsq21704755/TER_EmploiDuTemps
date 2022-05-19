@@ -56,37 +56,42 @@ def recupModulesSemestre():
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
 
-    Inscription = [] 
-    listeModulesSemestre=recupModulesSemestre()
-    
+    Inscription = [[]] 
+    listeModulesSemestre = recupModulesSemestre()
+    i = 0
+    j = 0
+
     if(semestreChoisi == "S1"):
-        
+       
         for etudiant in ListeEtudiants:
-        
-            for module in listeModulesSemestre:
             
-                for x in etudiant.get_matieres_s1():
-                
-                    if(x == module):
-                        Inscription.append(1)
-                    else:
-                        Inscription.append(0)
-    
+            tmp = etudiant.get_matieres_s2()
+
+            for module in listeModulesSemestre:
+             
+                if(tmp[j] == module):
+                    Inscription[i][j] = 1
+                else:
+                    Inscription[i][j] = 0
+            j = j + 1
+        i = i + 1   
+
     if(semestreChoisi == "S2"):
        
         for etudiant in ListeEtudiants:
             
-            for module in listeModulesSemestre:
-            
-                for x in etudiant.get_matieres_s2():
-                
-                    if(x == module):
-                        Inscription.append(1)
-                    else:
-                        Inscription.append(0)
-    
-    return Inscription
+            tmp = etudiant.get_matieres_s2()
 
+            for module in listeModulesSemestre:
+             
+                if(tmp[j] == module):
+                    Inscription[i][j] = 1
+                else:
+                    Inscription[i][j] = 0
+            j = j + 1
+        i = i + 1
+
+    return Inscription
 
 #Fonction tri des modules dans l'ordre imposé
 def ordreModule(modulesNonTries):
