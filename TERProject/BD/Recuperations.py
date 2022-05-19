@@ -29,9 +29,9 @@ def all_students():
             for tuple3 in res3:
                 if tuple3[0] == tuple[0]:
                     if tuple3[1] == 'PGLP' or tuple3[1] == 'Anglais' or tuple3[1] == 'Reseaux Etendus' or tuple3[1] == 'Protocoles IP' or tuple3[1] == 'Simulation' or tuple3[1] == 'Calcul Securise':
-                        sesmatieres1.append(tuple3[1])
+                        sesmatieres1.append(str(tuple3[1]))
                     if tuple3[1] == 'Conception de BD' or tuple3[1] == 'Tuning de BD' or tuple3[1] == 'Application Web et Securite' or tuple3[1] == 'Methodes de Ranking':
-                        sesmatieres2.append(tuple3[1])
+                        sesmatieres2.append(str(tuple3[1]))
             etudiant = Etudiant(tuple[0],tuple[1],tuple[2],tuple[3],sesmatieres1,sesmatieres2)
             mesetudiants.append(etudiant)
         print("Récupération des etudiants réalisée avec succès")

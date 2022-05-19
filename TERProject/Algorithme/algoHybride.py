@@ -58,8 +58,6 @@ def recupInscription():
 
     Inscription = [] 
     listeModulesSemestre=recupModulesSemestre()
-
-    counterInscription = 0
     
     if(semestreChoisi == "S1"):
         
@@ -84,7 +82,6 @@ def recupInscription():
                 
                     if(x == module):
                         Inscription.append(1)
-                        counterInscription = counterInscription + 1
                     else:
                         Inscription.append(0)
     
@@ -179,34 +176,31 @@ def generationCombinaisons():
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
     cptCombinaisons = []
-    cpt=0
+    cpt = 0
     while(cpt < nombreCombinaisons):
         cptCombinaisons.append(0)
-        cpt=cpt+1
-    modulesTrouves=[]
-    listeCombinaisons=generationCombinaisons()
-    Inscriptions=recupInscription()
-    x=0
-    y=0
-    dd=0
-    for x in Inscriptions:
-        for y in Inscriptions:
-            if y == 1:
-                dd=dd+1
+        cpt = cpt+1
+    modulesTrouves = []
+    listeCombinaisons = generationCombinaisons()
+    Inscriptions = recupInscription()
+    x = 0
 
-    print(dd)
     y = 0
-    i=0
-    j=0
-    for i in Inscriptions:
-        for j in Inscriptions:
-            if Inscriptions==1:
-                modulesTrouves.append(j)
-            modulesTrouves=ordreModule(modulesTrouves)
-            for x in listeCombinaisons:    #parcours combi par combi
-                if x==modulesTrouves:
-                    cptCombinaisons[x]=cptCombinaisons[x]+1
-                    y = y + 1
+    i = 0
+    j = 0
+    #Depuis Inscriptions, retrouver le module correspondant
+    #Inscriptions[x:etudiant][y:module]
+    listeModulesSemestre = recupModulesSemestre()
+    print(Inscriptions)
+
+#    for x in modulesTrouves:
+#        modulesTrouves[x] = ordreModule(x)
+
+#    for x in listeCombinaisons:    #parcours combi par combi
+#        if x == modulesTrouves:
+#            cptCombinaisons[x] = cptCombinaisons[x]+1
+#            y = y + 1
+
     return cptCombinaisons
 
 #Fonction qui va trier dans l'ordre décroissant cptCombinaisons
