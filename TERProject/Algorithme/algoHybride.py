@@ -56,8 +56,10 @@ def recupModulesSemestre():
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
 
-    Inscription = [[]] 
     listeModulesSemestre = recupModulesSemestre()
+    nbEtu = len(ListeEtudiants)
+    nbMod = len(listeModulesSemestre)
+    Inscription = [[0 for x in range(nbMod)] for y in range(nbEtu)]
     i = 0
     j = 0
 
@@ -65,31 +67,35 @@ def recupInscription():
        
         for etudiant in ListeEtudiants:
             
-            tmp = etudiant.get_matieres_s2()
-
             for module in listeModulesSemestre:
              
-                if(tmp[j] == module):
+                if module in etudiant.get_matieres_s1():
                     Inscription[i][j] = 1
                 else:
                     Inscription[i][j] = 0
-            j = j + 1
-        i = i + 1   
+                j = j + 1
+                if j == nbMod:
+                    j = 0
+            i = i + 1 
 
     if(semestreChoisi == "S2"):
        
         for etudiant in ListeEtudiants:
             
-            tmp = etudiant.get_matieres_s2()
-
             for module in listeModulesSemestre:
              
-                if(tmp[j] == module):
+                if module in etudiant.get_matieres_s2():
+                    
                     Inscription[i][j] = 1
                 else:
+
                     Inscription[i][j] = 0
-            j = j + 1
-        i = i + 1
+                
+                j = j + 1
+                
+                if j == nbMod:
+                    j = 0
+            i = i + 1
 
     return Inscription
 
