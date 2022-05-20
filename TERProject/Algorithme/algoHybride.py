@@ -16,6 +16,7 @@ from BD.Recuperations import (all_students,all_instructor,all_formations,all_mod
 from BD.Modifications import modif_student_inscription
 import numpy as np
 
+capaciteGroupe=40
 semestreChoisi="S2"
 nombreCombinaisons=5040
 
@@ -271,7 +272,71 @@ def selectionListeCombinaisons(moduleDonne):
     return newListeCombinaisons
 
 
-#Algorithme glouton pour remplir les groupes avec la listeCombinaison
+#Génération d'un groupe pour un module (glouton)
+def generationGroupe(moduleDonnee):
 
+    listeGroupes=[[],[]]
+    groupe=[]
+    cptGroupe=0
+    nbEtudiants=0
+    """
+    if(semestreChoisi=="S1"):
+        for etudiant in ListeEtudiants:
+            moduleEtudiant=etudiant.get_matieres_s1()
+            if moduleDonnee in moduleEtudiant:
+                if cptGroupe <= capaciteGroupe:
+                    cptGroupe=cptGroupe+1
+                    groupe.append(etudiant.get_numetudiant())
+                else :
+                    cptGroupe = 0
+                    listeGroupes.append(groupe)
+                    groupe.clear()
+        listeGroupes.append(groupe)
+    """
+    if(semestreChoisi=="S2"):
+        
+        
+        for etudiant in ListeEtudiants:
+            #print("Etudiant: "+str(etudiant.get_matieres_s2()))
+            #print("ModuleDonnee: "+str(moduleDonnee))
 
-#Algorithme pour optimiser
+            moduleEtudiant=etudiant.get_matieres_s2()
+
+            if moduleDonnee in moduleEtudiant:
+                #nbEtudiants=nbEtudiants+1
+                if cptGroupe < capaciteGroupe:
+                    #print("<= :"+str(cptGroupe))
+                    cptGroupe=cptGroupe+1
+                    #print("///////////////////////////"+str(cptGroupe))
+                    #print("AVANT : "+str(groupe))
+                    groupe.append(etudiant.get_numetudiant())
+                    print("APRES1 : "+str(groupe))
+
+                elif cptGroupe == capaciteGroupe:
+                    #print("> :"+str(cptGroupe))
+                    cptGroupe = 0
+                    print("Liste Groupe AVANT: " + str(listeGroupes))
+                    listeGroupes.append(groupe)
+                    print("Liste Groupe APRES: " + str(listeGroupes))
+                    for x in groupe :
+                        groupe.remove(x)
+                    #print("AVANT : "+str(groupe))
+                    groupe.append(etudiant.get_numetudiant())
+                    print("APRES2 : "+str(groupe))
+
+                else:
+                    print("ERREUR : "+str(cptGroupe))
+        print("Nombre etudiant inscrits: "+str(nbEtudiants))
+
+    return listeGroupes
+ 
+
+#Génération de tous les groupes pour tous les modules
+
+#Création de la matrice Affectation Groupe x Etudiant
+
+#Generation des conditions en fonction des seances
+
+#Passage de la matrice sous conditions 
+
+#Algorithme hongrois
