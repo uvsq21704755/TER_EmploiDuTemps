@@ -6,8 +6,8 @@ from Algorithme.Donnees import (liste_combinaisons_s1,affectation_combi_etudiant
 from Algorithme.algoHybride import (recupInscription)
 
 if __name__ == '__main__':
-  print("Bonjour ! Souhaitez-vous tester l'application ou entrer vos données ?")
-  reponse = input("Répondez par 'Test' ou 'Entrer' : ")
+  print("Bonjour ! Souhaitez-vous tester l'application ou entrer vos donnees ?")
+  reponse = input("Repondez par 'Test' ou 'Entrer' : ")
   if reponse == 'Test':
     delete_all()
     create_tables()

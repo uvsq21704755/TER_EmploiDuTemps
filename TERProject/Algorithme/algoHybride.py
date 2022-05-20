@@ -114,6 +114,21 @@ def generationCptCombinaisons():
     return cptCombinaisons
 
 
+def suppressionDoublons():
+    listeCombinaisons=generationCombinaisons()
+    cpt=0
+    for x in listeCombinaisons[x][y]:
+        for y in listeCombinaisons[x][y]:
+            for k in listeCombinaisons[k][j]:
+                for j in listeCombinaisons[k][j]:
+                    if y == j:
+                        cpt = cpt+1
+                    else:
+                        cpt = 0
+            
+
+
+
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
     indice=0

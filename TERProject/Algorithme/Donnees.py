@@ -27,6 +27,9 @@ def liste_combinaisons_s1():
             liste.append(combi)
 
     return liste
+
+
+
 def liste_combinaisons_s2():
     listeEtudiants = all_students()
 
@@ -38,8 +41,10 @@ def liste_combinaisons_s2():
         combi.sort()
         if combi not in liste:
             liste.append(combi)
-
     return liste
+
+
+
 def affectation_combi_etudiant_s1():
     combinaisons = liste_combinaisons_s1()
     etudiants = all_students()
@@ -57,6 +62,9 @@ def affectation_combi_etudiant_s1():
         affectation.append(item)
 
     return affectation
+
+
+
 def affectation_combi_etudiant_s2():
     combinaisons = liste_combinaisons_s2()
     etudiants = all_students()
@@ -74,6 +82,9 @@ def affectation_combi_etudiant_s2():
         affectation.append(item)
 
     return affectation
+
+
+
 def creation_groupe():
     matieres = all_modules()
     groupes = []
@@ -92,6 +103,9 @@ def creation_groupe():
             groupe = Groupe(matiere.get_intitule(),item,nb_eleves_grpe)
             groupes.append(groupe)
     return groupes
+
+
+
 def affectation_etudiants_groupe_s1():
     groupes = creation_groupe()
     affects = affectation_combi_etudiant_s1()
@@ -126,6 +140,9 @@ def affectation_etudiants_groupe_s2():
         groupe.set_liste_eleves(liste_etudiants)
 
     return groupes
+
+
+
 def conflits():
     etudiants = all_students()
     liste_conflits = []
@@ -168,6 +185,8 @@ def conflits():
             item.append(conflit)
             liste_conflits.append(item)
     return liste_conflits
+
+
 
 def calcul_conflits(liste_conflits):
     result = 0

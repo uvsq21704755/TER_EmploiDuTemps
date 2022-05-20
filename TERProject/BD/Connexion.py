@@ -4,8 +4,8 @@ import psycopg2
 def connexion():
     try:
         conn = psycopg2.connect(
-            user="clement",
-            password="cleva",
+            user="thiva",
+            password="projetTER",
             host="127.0.0.1",
             port="5432",
             database="Universite"
