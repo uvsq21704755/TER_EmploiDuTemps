@@ -14,8 +14,7 @@ if __name__ == '__main__':
 
   ret = []
   ret = calculCptCombinaisons()
-#  for x in ret:
-#      print(x)
+  #print(ret)
   #elif reponse == 'Entrer':
     #create_tables()
     #delete_all()

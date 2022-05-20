@@ -101,19 +101,18 @@ def recupInscription():
 
 #Fonction tri des modules dans l'ordre imposé
 def ordreModule(modulesNonTries):
+
     moduleTrie=[]
-    for module in ListeModules:
+    listeModulesSemestre = recupModulesSemestre()
+    nbModNT = len(modulesNonTries)
+
+    for module in listeModulesSemestre:
         #print("-----")
         #print(module.get_intitule())
         #print(modulesNonTries)
-        if module.get_intitule() == modulesNonTries[0]:
-            moduleTrie.append(modulesNonTries[0])
-        if module.get_intitule() == modulesNonTries[1]:
-            moduleTrie.append(modulesNonTries[1])
-        if module.get_intitule() == modulesNonTries[2]:
-            moduleTrie.append(modulesNonTries[2])
-        if module.get_intitule() == modulesNonTries[3]:
-            moduleTrie.append(modulesNonTries[3])
+        for x in range(0,nbModNT):
+            if module == modulesNonTries[x]:
+                moduleTrie.append(modulesNonTries[x])
         #print("apres append: "+str(moduleTrie))
     #print(moduleTrie)    
     return moduleTrie
@@ -191,26 +190,35 @@ def calculCptCombinaisons():
     while(cpt < nombreCombinaisons):
         cptCombinaisons.append(0)
         cpt = cpt+1
-    modulesTrouves = []
+
     listeCombinaisons = generationCombinaisons()
     Inscriptions = recupInscription()
-    x = 0
-
-    y = 0
-    i = 0
     j = 0
-    #Depuis Inscriptions, retrouver le module correspondant
-    #Inscriptions[x:etudiant][y:module]
+    idx = 0
     listeModulesSemestre = recupModulesSemestre()
-    print(Inscriptions)
+    modulesTrouves = []
 
-#    for x in modulesTrouves:
-#        modulesTrouves[x] = ordreModule(x)
+    for i in range(0,len(ListeEtudiants)):
 
-#    for x in listeCombinaisons:    #parcours combi par combi
-#        if x == modulesTrouves:
-#            cptCombinaisons[x] = cptCombinaisons[x]+1
-#            y = y + 1
+            for x in listeModulesSemestre:
+                
+                if Inscriptions[i][j] == 1:
+                    
+                    modulesTrouves.append(x) 
+
+                j = j + 1
+                if j == 4:
+
+                    j = 0
+                    modulesTrouves = ordreModule(modulesTrouves)
+                    for y in listeCombinaisons:    #parcours combi par combi
+                    
+                        if y == modulesTrouves:
+                        
+                            cptCombinaisons[idx] = cptCombinaisons[idx] + 1
+                            idx = idx + 1
+
+            modulesTrouves.clear()
 
     return cptCombinaisons
 
