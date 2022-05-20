@@ -16,10 +16,8 @@ from BD.Recuperations import (all_students,all_instructor,all_formations,all_mod
 from BD.Modifications import modif_student_inscription
 import numpy as np
 
-
-
 semestreChoisi="S2"
-nombreCombinaisons=64
+nombreCombinaisons=5040
 
 #Recup de la liste des etudiants
 ListeEtudiants=all_students()
@@ -32,28 +30,64 @@ ListeModules=all_modules()
 #Recup des seances
 ListeSeances=all_seances()
 
+##### Fonction pour récupérer les matières de semestre demandé en paramètre
+def recupModulesSemestre():
+
+    listeModulesSemestre=[]
+
+    if(semestreChoisi == "S1"):
+        for module in ListeModules:
+            for etudiant in ListeEtudiants:
+                for x in etudiant.get_matieres_s1():
+                    if module.get_intitule() == x:
+                        if module.get_intitule() not in listeModulesSemestre:
+                            listeModulesSemestre.append(module.get_intitule())
+
+    if(semestreChoisi == "S2"):
+        for module in ListeModules:
+            for etudiant in ListeEtudiants:
+                for x in etudiant.get_matieres_s2():
+                    if module.get_intitule() == x:
+                        if module.get_intitule() not in listeModulesSemestre:
+                            listeModulesSemestre.append(module.get_intitule())
+    
+    return listeModulesSemestre    
 
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
-    Inscription = np.arange(len(ListeEtudiants)*len(ListeModules)).reshape(len(ListeEtudiants), len(ListeModules))
+
+    Inscription = [] 
+    listeModulesSemestre=recupModulesSemestre()
+
+    counterInscription = 0
+    
     if(semestreChoisi == "S1"):
+        
         for etudiant in ListeEtudiants:
-            for module in ListeModules:
-                if(etudiant.get_matieres_s1() == module.get_code()):
-                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
-                else:
-                    Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
-
-
-    if(semestreChoisi == "S2"):
-        for etudiant in ListeEtudiants:
-            for module in ListeModules:
-                for x in iter(etudiant.get_matieres_s2()):
-                    if(x == module.get_intitule()):
-                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 1
+        
+            for module in listeModulesSemestre:
+            
+                for x in etudiant.get_matieres_s1():
+                
+                    if(x == module):
+                        Inscription.append(1)
                     else:
-                     Inscription[ListeEtudiants.index(etudiant)][ListeModules.index(module)] = 0
-
+                        Inscription.append(0)
+    
+    if(semestreChoisi == "S2"):
+       
+        for etudiant in ListeEtudiants:
+            
+            for module in listeModulesSemestre:
+            
+                for x in etudiant.get_matieres_s2():
+                
+                    if(x == module):
+                        Inscription.append(1)
+                        counterInscription = counterInscription + 1
+                    else:
+                        Inscription.append(0)
+    
     return Inscription
 
 
@@ -61,58 +95,86 @@ def recupInscription():
 def ordreModule(modulesNonTries):
     moduleTrie=[]
     for module in ListeModules:
-        if module == modulesNonTries[0]:
+        #print("-----")
+        #print(module.get_intitule())
+        #print(modulesNonTries)
+        if module.get_intitule() == modulesNonTries[0]:
             moduleTrie.append(modulesNonTries[0])
-        if module == modulesNonTries[1]:
+        if module.get_intitule() == modulesNonTries[1]:
             moduleTrie.append(modulesNonTries[1])
-        if module == modulesNonTries[2]:
+        if module.get_intitule() == modulesNonTries[2]:
             moduleTrie.append(modulesNonTries[2])
-        if module == modulesNonTries[3]:
+        if module.get_intitule() == modulesNonTries[3]:
             moduleTrie.append(modulesNonTries[3])
+        #print("apres append: "+str(moduleTrie))
+    #print(moduleTrie)    
     return moduleTrie
-
-
-#Fonction qui récupère seulement les modules
-def recupModules(moduleDonne):
-    for x in ListeSeances:
-        if moduleDonne == x.get_matiere():
-            return True
-    return False
-
 
 #Fonction générant les combinaisons => à virer les combi avec les modules de réseaux
 def generationCombinaisons():
+    
     modulesNonTries=[]
-    j=0
-    listeCombinaisons=np.arange(nombreCombinaisons).reshape(16,4)
-    for module1 in ListeModules:
-        for module2 in ListeModules:
-            for module3 in ListeModules:
-                for module4 in ListeModules:
-                    if (recupModules(module1) & recupModules(module2) & recupModules(module3) & recupModules(module4)):
-                        if (module1!= module2) & (module1 != module3) & (module1 != module4) & (module2 != module3) & (module2 != module4) & (module3 != module4):
+    listeCombinaisons = []
+    ListeModulesSemestre=recupModulesSemestre()
+    
+    #S1
+    if(semestreChoisi == "S1"):
+
+        for module1 in ListeModulesSemestre:
+            
+            for module2 in ListeModulesSemestre:
+                
+                for module3 in ListeModulesSemestre:
+                    
+                    for module4 in ListeModulesSemestre:
+                        
+                        for module5 in ListeModulesSemestre:
+                            
+                            if (module1!=module2) and (module1!=module3) and (module1!=module4) and (module1!=module5) and (module2!=module3) and (module2!=module4) and (module2!=module5) and (module3!=module4) and (module3!=module5) and (module4!=module5):
+
+                                modulesNonTries.append(module1)
+                                modulesNonTries.append(module2)
+                                modulesNonTries.append(module3)
+                                modulesNonTries.append(module4)
+                                modulesNonTries.append(module5)
+                                modulesTries = ordreModule(modulesNonTries)
+
+                                if modulesTries not in listeCombinaisons:
+                                    listeCombinaisons.append(modulesTries)
+
+                                modulesNonTries.remove(module1)
+                                modulesNonTries.remove(module2)
+                                modulesNonTries.remove(module3)
+                                modulesNonTries.remove(module4)
+                                modulesNonTries.remove(module5)
+    #S2
+    if(semestreChoisi == "S2"):
+
+        for module1 in ListeModulesSemestre:
+            
+            for module2 in ListeModulesSemestre:
+                
+                for module3 in ListeModulesSemestre:
+                    
+                    for module4 in ListeModulesSemestre:
+                        
+                        if (module1!=module2) and (module1!=module3) and (module1!=module4) and (module2!=module3) and (module2!=module4) and (module3!=module4):
+
                             modulesNonTries.append(module1)
                             modulesNonTries.append(module2)
                             modulesNonTries.append(module3)
                             modulesNonTries.append(module4)
-                            modulesTries=ordreModule(modulesNonTries)
-                            listeCombinaisons[j][0]=modulesTries[0]
-                            listeCombinaisons[j][1]=modulesTries[1]
-                            listeCombinaisons[j][2]=modulesTries[2]
-                            listeCombinaisons[j][3]=modulesTries[3]
-                            j=j+1
+                            modulesTries = ordreModule(modulesNonTries)
+
+                            if modulesTries not in listeCombinaisons:
+                                listeCombinaisons.append(modulesTries)
+
+                            modulesNonTries.remove(module1)
+                            modulesNonTries.remove(module2)
+                            modulesNonTries.remove(module3)
+                            modulesNonTries.remove(module4)
+
     return listeCombinaisons
-
-
-#Fonction générant le cptCombinaisons (effectif d'etudiants pour chacun des combinaisons)
-def generationCptCombinaisons():
-    cptCombinaisons=[]
-    i=0
-    while(i < nombreCombinaisons):
-        cptCombinaisons[i]=0
-        i=i+1
-    return cptCombinaisons
-
 
 def suppressionDoublons():
     listeCombinaisons=generationCombinaisons()
@@ -131,23 +193,36 @@ def suppressionDoublons():
 
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
-    indice=0
+    cptCombinaisons = []
+    cpt=0
+    while(cpt < nombreCombinaisons):
+        cptCombinaisons.append(0)
+        cpt=cpt+1
     modulesTrouves=[]
     listeCombinaisons=generationCombinaisons()
-    cptCombinaisons=generationCombinaisons()
     Inscriptions=recupInscription()
-    y = 0
-    for i in Inscriptions[i][j]:        #parcours etudiant par etudiant
-        for j in Inscriptions[i][j]:          #parcours module par module
-            if Inscriptions[i][j] == 1:
-                modulesTrouves.append(j)
-        modulesTrouves=ordreModule(modulesTrouves)
-        for x in listeCombinaisons[x][y]:    #parcours combi par combi
-            if listeCombinaisons[x][y]==modulesTrouves:
-                cptCombinaisons[x]=cptCombinaisons[x]+1
-                y = y + 1
-    return cptCombinaisons
+    x=0
+    y=0
+    dd=0
+    for x in Inscriptions:
+        for y in Inscriptions:
+            if y == 1:
+                dd=dd+1
 
+    print(dd)
+    y = 0
+    i=0
+    j=0
+    for i in Inscriptions:
+        for j in Inscriptions:
+            if Inscriptions==1:
+                modulesTrouves.append(j)
+            modulesTrouves=ordreModule(modulesTrouves)
+            for x in listeCombinaisons:    #parcours combi par combi
+                if x==modulesTrouves:
+                    cptCombinaisons[x]=cptCombinaisons[x]+1
+                    y = y + 1
+    return cptCombinaisons
 
 #Fonction qui va trier dans l'ordre décroissant cptCombinaisons
 def triCptCombinaisons():
