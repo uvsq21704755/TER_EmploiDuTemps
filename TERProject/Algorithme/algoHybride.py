@@ -17,7 +17,7 @@ from BD.Modifications import modif_student_inscription
 import numpy as np
 
 semestreChoisi="S2"
-nombreCombinaisons=5040
+nombreCombinaisons=8
 
 #Recup de la liste des etudiants
 ListeEtudiants=all_students()
@@ -187,10 +187,7 @@ def generationCombinaisons():
 def calculCptCombinaisons():
     cptCombinaisons = []
     cpt = 0
-    while(cpt < nombreCombinaisons):
-        cptCombinaisons.append(0)
-        cpt = cpt+1
-
+    
     listeCombinaisons = generationCombinaisons()
     Inscriptions = recupInscription()
     j = 0
@@ -201,7 +198,7 @@ def calculCptCombinaisons():
     for i in range(0,len(ListeEtudiants)):
 
             for x in listeModulesSemestre:
-                
+                    
                 if Inscriptions[i][j] == 1:
                     
                     modulesTrouves.append(x) 
@@ -211,13 +208,14 @@ def calculCptCombinaisons():
 
                     j = 0
                     modulesTrouves = ordreModule(modulesTrouves)
-                    for y in listeCombinaisons:    #parcours combi par combi
-                    
-                        if y == modulesTrouves:
+                   
+                for y in listeCombinaisons:    #parcours combi par combi
+                     
+                    if y == modulesTrouves:
                         
-                            cptCombinaisons[idx] = cptCombinaisons[idx] + 1
-                            idx = idx + 1
-
+                        cptCombinaisons.append(cpt + 1)
+                        cpt = cpt + 1
+            
             modulesTrouves.clear()
 
     return cptCombinaisons

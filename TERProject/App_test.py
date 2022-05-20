@@ -12,9 +12,6 @@ if __name__ == '__main__':
   delete_all()
   create_tables()
 
-  ret = []
-  ret = calculCptCombinaisons()
-  #print(ret)
   #elif reponse == 'Entrer':
     #create_tables()
     #delete_all()
