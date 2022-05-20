@@ -16,8 +16,9 @@ from BD.Recuperations import (all_students,all_instructor,all_formations,all_mod
 from BD.Modifications import modif_student_inscription
 import numpy as np
 
+capaciteGroupe=40
 semestreChoisi="S2"
-nombreCombinaisons=8
+nombreCombinaisons=5040
 
 #Recup de la liste des etudiants
 ListeEtudiants=all_students()
@@ -267,7 +268,60 @@ def selectionListeCombinaisons(moduleDonne):
     return newListeCombinaisons
 
 
-#Algorithme glouton pour remplir les groupes avec la listeCombinaison
+#Génération d'un groupe pour un module (glouton)
+def generationGroupe(moduleDonnee):
 
+    listeGroupes = []
+    groupe = []
+    cptGroupe = 0
+    nbEtudiants = 0
+    """
+    if(semestreChoisi=="S1"):
+        for etudiant in ListeEtudiants:
+            moduleEtudiant=etudiant.get_matieres_s1()
+            if moduleDonnee in moduleEtudiant:
+                if cptGroupe <= capaciteGroupe:
+                    cptGroupe=cptGroupe+1
+                    groupe.append(etudiant.get_numetudiant())
+                else :
+                    cptGroupe = 0
+                    listeGroupes.append(groupe)
+                    groupe.clear()
+        listeGroupes.append(groupe)
+    """
+    if(semestreChoisi == "S2"):
+                
+        for etudiant in ListeEtudiants:
 
-#Algorithme pour optimiser
+            moduleEtudiant = etudiant.get_matieres_s2()
+            
+            for moduleConsidere in moduleEtudiant:
+
+                if moduleDonnee == moduleConsidere and cptGroupe < capaciteGroupe:
+                    
+                   cptGroupe = cptGroupe + 1
+                   groupe.append(etudiant.get_numetudiant())
+
+                elif cptGroupe >= capaciteGroupe:
+
+                    cptGroupe = 0
+                    listeGroupes.append(groupe.copy())
+                    groupe.clear()
+                    groupe.append(etudiant.get_numetudiant())
+
+            print(cptGroupe)
+             
+    listeGroupes.append(groupe)
+
+    return listeGroupes
+ 
+
+#Génération de tous les groupes pour tous les modules
+
+#Création de la matrice Affectation Groupe x Etudiant
+
+#Generation des conditions en fonction des seances
+
+#Passage de la matrice sous conditions 
+
+#Algorithme hongrois
