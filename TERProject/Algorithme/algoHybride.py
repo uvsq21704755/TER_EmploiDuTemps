@@ -57,56 +57,63 @@ def recupModulesSemestre():
 #Fonction permettant de récupérer les inscriptions
 def recupInscription():
 
-    Inscription = [] 
-    listeModulesSemestre=recupModulesSemestre()
+    listeModulesSemestre = recupModulesSemestre()
+    nbEtu = len(ListeEtudiants)
+    nbMod = len(listeModulesSemestre)
+    Inscription = [[0 for x in range(nbMod)] for y in range(nbEtu)]
+    i = 0
+    j = 0
 
-    counterInscription = 0
-    
     if(semestreChoisi == "S1"):
-        
+       
         for etudiant in ListeEtudiants:
-        
-            for module in listeModulesSemestre:
             
-                for x in etudiant.get_matieres_s1():
-                
-                    if(x == module):
-                        Inscription.append(1)
-                    else:
-                        Inscription.append(0)
-    
+            for module in listeModulesSemestre:
+             
+                if module in etudiant.get_matieres_s1():
+                    Inscription[i][j] = 1
+                else:
+                    Inscription[i][j] = 0
+                j = j + 1
+                if j == nbMod:
+                    j = 0
+            i = i + 1 
+
     if(semestreChoisi == "S2"):
        
         for etudiant in ListeEtudiants:
             
             for module in listeModulesSemestre:
-            
-                for x in etudiant.get_matieres_s2():
-                
-                    if(x == module):
-                        Inscription.append(1)
-                        counterInscription = counterInscription + 1
-                    else:
-                        Inscription.append(0)
-    
-    return Inscription
+             
+                if module in etudiant.get_matieres_s2():
+                    
+                    Inscription[i][j] = 1
+                else:
 
+                    Inscription[i][j] = 0
+                
+                j = j + 1
+                
+                if j == nbMod:
+                    j = 0
+            i = i + 1
+
+    return Inscription
 
 #Fonction tri des modules dans l'ordre imposé
 def ordreModule(modulesNonTries):
+
     moduleTrie=[]
-    for module in ListeModules:
+    listeModulesSemestre = recupModulesSemestre()
+    nbModNT = len(modulesNonTries)
+
+    for module in listeModulesSemestre:
         #print("-----")
         #print(module.get_intitule())
         #print(modulesNonTries)
-        if module.get_intitule() == modulesNonTries[0]:
-            moduleTrie.append(modulesNonTries[0])
-        if module.get_intitule() == modulesNonTries[1]:
-            moduleTrie.append(modulesNonTries[1])
-        if module.get_intitule() == modulesNonTries[2]:
-            moduleTrie.append(modulesNonTries[2])
-        if module.get_intitule() == modulesNonTries[3]:
-            moduleTrie.append(modulesNonTries[3])
+        for x in range(0,nbModNT):
+            if module == modulesNonTries[x]:
+                moduleTrie.append(modulesNonTries[x])
         #print("apres append: "+str(moduleTrie))
     #print(moduleTrie)    
     return moduleTrie
@@ -195,34 +202,38 @@ def suppressionDoublons():
 #Fonction qui incrémente Cpt
 def calculCptCombinaisons():
     cptCombinaisons = []
-    cpt=0
-    while(cpt < nombreCombinaisons):
-        cptCombinaisons.append(0)
-        cpt=cpt+1
-    modulesTrouves=[]
-    listeCombinaisons=generationCombinaisons()
-    Inscriptions=recupInscription()
-    x=0
-    y=0
-    dd=0
-    for x in Inscriptions:
-        for y in Inscriptions:
-            if y == 1:
-                dd=dd+1
+    cpt = 0
+    
+    listeCombinaisons = generationCombinaisons()
+    Inscriptions = recupInscription()
+    j = 0
+    idx = 0
+    listeModulesSemestre = recupModulesSemestre()
+    modulesTrouves = []
 
-    print(dd)
-    y = 0
-    i=0
-    j=0
-    for i in Inscriptions:
-        for j in Inscriptions:
-            if Inscriptions==1:
-                modulesTrouves.append(j)
-            modulesTrouves=ordreModule(modulesTrouves)
-            for x in listeCombinaisons:    #parcours combi par combi
-                if x==modulesTrouves:
-                    cptCombinaisons[x]=cptCombinaisons[x]+1
-                    y = y + 1
+    for i in range(0,len(ListeEtudiants)):
+
+            for x in listeModulesSemestre:
+                    
+                if Inscriptions[i][j] == 1:
+                    
+                    modulesTrouves.append(x) 
+
+                j = j + 1
+                if j == 4:
+
+                    j = 0
+                    modulesTrouves = ordreModule(modulesTrouves)
+                   
+                for y in listeCombinaisons:    #parcours combi par combi
+                     
+                    if y == modulesTrouves:
+                        
+                        cptCombinaisons.append(cpt + 1)
+                        cpt = cpt + 1
+            
+            modulesTrouves.clear()
+
     return cptCombinaisons
 
 #Fonction qui va trier dans l'ordre décroissant cptCombinaisons
@@ -275,10 +286,11 @@ def selectionListeCombinaisons(moduleDonne):
 #Génération d'un groupe pour un module (glouton)
 def generationGroupe(moduleDonnee):
 
-    listeGroupes=[[],[]]
-    groupe=[]
-    cptGroupe=0
-    nbEtudiants=0
+    listeGroupes = []
+    groupe = []
+    cptGroupe = 0
+    nbEtudiants = 0
+
     """
     if(semestreChoisi=="S1"):
         for etudiant in ListeEtudiants:
@@ -293,40 +305,30 @@ def generationGroupe(moduleDonnee):
                     groupe.clear()
         listeGroupes.append(groupe)
     """
-    if(semestreChoisi=="S2"):
-        
-        
+
+    if(semestreChoisi == "S2"):
+                
         for etudiant in ListeEtudiants:
-            #print("Etudiant: "+str(etudiant.get_matieres_s2()))
-            #print("ModuleDonnee: "+str(moduleDonnee))
 
-            moduleEtudiant=etudiant.get_matieres_s2()
+            moduleEtudiant = etudiant.get_matieres_s2()
+            
+            for moduleConsidere in moduleEtudiant:
 
-            if moduleDonnee in moduleEtudiant:
-                #nbEtudiants=nbEtudiants+1
-                if cptGroupe < capaciteGroupe:
-                    #print("<= :"+str(cptGroupe))
-                    cptGroupe=cptGroupe+1
-                    #print("///////////////////////////"+str(cptGroupe))
-                    #print("AVANT : "+str(groupe))
-                    groupe.append(etudiant.get_numetudiant())
-                    print("APRES1 : "+str(groupe))
+                if moduleDonnee == moduleConsidere and cptGroupe < capaciteGroupe:
+                    
+                   cptGroupe = cptGroupe + 1
+                   groupe.append(etudiant.get_numetudiant())
 
-                elif cptGroupe == capaciteGroupe:
-                    #print("> :"+str(cptGroupe))
+                elif cptGroupe >= capaciteGroupe:
+
                     cptGroupe = 0
-                    print("Liste Groupe AVANT: " + str(listeGroupes))
-                    listeGroupes.append(groupe)
-                    print("Liste Groupe APRES: " + str(listeGroupes))
-                    for x in groupe :
-                        groupe.remove(x)
-                    #print("AVANT : "+str(groupe))
+                    listeGroupes.append(groupe.copy())
+                    groupe.clear()
                     groupe.append(etudiant.get_numetudiant())
-                    print("APRES2 : "+str(groupe))
 
-                else:
-                    print("ERREUR : "+str(cptGroupe))
-        print("Nombre etudiant inscrits: "+str(nbEtudiants))
+            print(cptGroupe)
+             
+    listeGroupes.append(groupe)
 
     return listeGroupes
  
@@ -358,5 +360,7 @@ def creationMatriceAffectation():
 
 #Passage de la matrice sous conditions 
 
+#Passage de la matrice sous conditions
 
+#Algorithme hongrois
 

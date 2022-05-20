@@ -21,7 +21,6 @@ for x in ListeModulesVoulus:
   listeGeneration = generationGroupe(x.get_intitule())
   print("***Groupes du module " + str(x.get_intitule()) + ": " + str(listeGeneration))
   listeGeneration.clear()
-  break
 
 
 
