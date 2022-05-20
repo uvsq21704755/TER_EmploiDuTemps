@@ -331,12 +331,32 @@ def generationGroupe(moduleDonnee):
     return listeGroupes
  
 
-#Génération de tous les groupes pour tous les modules
+def generationTousLesGroupes():
 
-#Création de la matrice Affectation Groupe x Etudiant
+    listeGroupes=[[],[]]
+
+    for module in ListeModules:
+       listeGroupes=generationGroupe(module)
+
+    print(listeGroupes)
+    return listeGroupes
+    
+
+
+#Génération de tous les groupes pour tous les modules + Création de la matrice Affectation Groupe x Etudiant
+def creationMatriceAffectation():
+
+    listeGroupes=generationTousLesGroupes()
+    matriceAffectation=[[],[]]
+
+
+
+        
+    return listeGroupes
 
 #Generation des conditions en fonction des seances
 
 #Passage de la matrice sous conditions 
 
-#Algorithme hongrois
+
+
