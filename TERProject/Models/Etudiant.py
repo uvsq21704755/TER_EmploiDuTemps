@@ -25,4 +25,4 @@ class Etudiant:
     def get_matieres_p2(self):
         return self.matieres_p2
     def affichage(self):
-        print("L'étudiant : ", self.nom, " ", self.prenom, " ", self.num_etudiant, " est en ", self.formation, "et suit les cours suivant :", self.matieres_s2, self.matieres_s1)
+        print("L'étudiant : ", self.nom, " ", self.prenom, " ", self.num_etudiant, " est en ", self.formation, "et suit les cours suivant :", self.matieres_p2, self.matieres_p1)

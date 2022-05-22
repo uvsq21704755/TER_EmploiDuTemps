@@ -1,19 +1,19 @@
 
-from BD.Connexion import (connexion,close_connexion)
+from TERProject.BD.Connexion import (connexion,close_connexion)
 import random
 import psycopg2
-from Models.Creneau import Creneau
-from Models.Salle import Salle
-from Models.Enseignant import Enseignant
-from Models.Etudiant import Etudiant
-from Models.Formation import Formation
-from Models.Matiere import Matiere
-from Models.Seance import Seance
-from Models.Groupe import Groupe
-from BD.Creation_tables import (create_tables,delete_all)
-from BD.Insertions import (insertions_bd,insert_groupes)
-from BD.Recuperations import (all_students,all_instructor,all_formations,all_modules, all_modules_p1, all_modules_p2, all_creneaux, all_rooms, all_seances,matiere_nb_groupe,matiere_nb_eleves, verif_affectation, seances_etudiant_p1, seances_etudiant_p2, return_groupe_etudiant)
-from BD.Modifications import modif_student_inscription
+from TERProject.Models.Creneau import Creneau
+from TERProject.Models.Salle import Salle
+from TERProject.Models.Enseignant import Enseignant
+from TERProject.Models.Etudiant import Etudiant
+from TERProject.Models.Formation import Formation
+from TERProject.Models.Matiere import Matiere
+from TERProject.Models.Seance import Seance
+from TERProject.Models.Groupe import Groupe
+from TERProject.BD.Creation_tables import (create_tables,delete_all)
+from TERProject.BD.Insertions import (insertions_bd,insert_groupes)
+from TERProject.BD.Recuperations import (all_students,all_instructor,all_formations,all_modules, all_modules_p1, all_modules_p2, all_creneaux, all_rooms, all_seances,matiere_nb_groupe,matiere_nb_eleves, verif_affectation, seances_etudiant_p1, seances_etudiant_p2, return_groupe_etudiant)
+from TERProject.BD.Modifications import modif_student_inscription
 
 
 def liste_combinaisons_p1():
@@ -311,7 +311,7 @@ def algo():
                 groupes_deja_vu1.append(groupe2)
     liste_conflits2 = conflits1()
     conflit2 = calcul_conflits(liste_conflits2)
-    print("Rearrangement : La solution initiale a {} conflits".format(conflit2))
+    print("Pic amélioration : {} conflits".format(conflit2))
     memorise_groupe.append(groupes_initiale)
     memorise_conflits.append(conflit2)
 
@@ -320,7 +320,7 @@ def algo():
     cpt = 0
 
     for iteration in range(10):
-        if cpt > 20:
+        if cpt > 5:
             break
         groupes_deja_vu = []
         for groupe in groupes_initiale:

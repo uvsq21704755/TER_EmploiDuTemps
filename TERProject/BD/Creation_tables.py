@@ -1,4 +1,4 @@
-from BD.Connexion import (connexion,close_connexion)
+from TERProject.BD.Connexion import (connexion,close_connexion)
 import psycopg2
 
 
@@ -21,7 +21,6 @@ def delete_all():
         sql = "truncate table contient,Groupe,Optionsf,enseigne,inscrit, seance, salle, creneau, enseignant, etudiant,  matiere, formation;"
         cur.execute(sql)
         conn.commit()
-        print("Suppressions avec succès")
         close_connexion(conn,cur)
     except (Exception, psycopg2.Error) as error:
         print("Erreur lors des suppressions dans les tables", error)

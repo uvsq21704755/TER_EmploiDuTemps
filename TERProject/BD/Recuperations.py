@@ -1,13 +1,13 @@
-from BD.Connexion import (connexion,close_connexion)
+from TERProject.BD.Connexion import (connexion,close_connexion)
 import psycopg2
-from Models.Creneau import Creneau
-from Models.Salle import Salle
-from Models.Enseignant import Enseignant
-from Models.Etudiant import Etudiant
-from Models.Formation import Formation
-from Models.Matiere import Matiere
-from Models.Seance import Seance
-from Models.Groupe import Groupe
+from TERProject.Models.Creneau import Creneau
+from TERProject.Models.Salle import Salle
+from TERProject.Models.Enseignant import Enseignant
+from TERProject.Models.Etudiant import Etudiant
+from TERProject.Models.Formation import Formation
+from TERProject.Models.Matiere import Matiere
+from TERProject.Models.Seance import Seance
+from TERProject.Models.Groupe import Groupe
 
 def all_students():
     try:
@@ -348,19 +348,13 @@ def all_seances_p1():
         conn = connexion()
         cur = conn.cursor()
         sql = "SELECT s.NumSeance,c.Jour, c.HeureDebut, c.HeureFin, s.NomSalle , e.Nom, s.NumGroupe, m.Intitule FROM Seance s, Salle, Matiere m, Enseignant e, Creneau c WHERE s.NomSalle = Salle.NomSalle AND m.Code = s.CodeModule AND e.IdEnseignant = s.IdEnseignant AND c.IdCreneau = s.IdCreneau  AND (m.Intitule = 'PGLP' or m.Intitule = 'Anglais' or m.Intitule = 'Reseaux etendus' or m.Intitule = 'Protocoles IP' or m.Intitule = 'Simulation' or m.Intitule = 'Calcul Securise') "
-        sql2 = "SELECT count(*) FROM Seance"
         print("Select des seances")
         cur.execute(sql)
         res = cur.fetchall()
         for tuple in res:
             seance = Seance(tuple[0],tuple[1],tuple[2],tuple[3],tuple[4],tuple[5],tuple[6],tuple[7])
             messeances.append(seance)
-        cur.execute(sql2)
-        res2 = cur.fetchall()
-        for tuple2 in res2:
-            print("Il y'a ", tuple2[0], "seances")
         close_connexion(conn, cur)
-
     except (Exception, psycopg2.Error) as error:
         print("Erreur lors de la création des tables", error)
 
@@ -373,17 +367,12 @@ def all_seances_p2():
         conn = connexion()
         cur = conn.cursor()
         sql = "SELECT s.NumSeance,c.Jour, c.HeureDebut, c.HeureFin, s.NomSalle , e.Nom, s.NumGroupe, m.Intitule FROM Seance s, Salle, Matiere m, Enseignant e, Creneau c WHERE s.NomSalle = Salle.NomSalle AND m.Code = s.CodeModule AND e.IdEnseignant = s.IdEnseignant AND c.IdCreneau = s.IdCreneau  AND (ma.Intitule = 'Conception de BD' or ma.Intitule = 'Tuning de BD' or ma.Intitule = 'Application Web et Securite' or ma.Intitule = 'Methodes de Ranking') "
-        sql2 = "SELECT count(*) FROM Seance"
         print("Select des seances")
         cur.execute(sql)
         res = cur.fetchall()
         for tuple in res:
             seance = Seance(tuple[0],tuple[1],tuple[2],tuple[3],tuple[4],tuple[5],tuple[6],tuple[7])
             messeances.append(seance)
-        cur.execute(sql2)
-        res2 = cur.fetchall()
-        for tuple2 in res2:
-            print("Il y'a ", tuple2[0], "seances")
         close_connexion(conn, cur)
 
     except (Exception, psycopg2.Error) as error:
