@@ -17,7 +17,7 @@ from BD.Modifications import modif_student_inscription
 import numpy as np
 
 capaciteGroupe=40
-semestreChoisi="S2"
+semestreChoisi="S1"
 nombreCombinaisons=5040
 
 #Recup de la liste des etudiants
@@ -291,43 +291,36 @@ def generationGroupe(moduleDonnee):
     cptGroupe = 0
     nbEtudiants = 0
 
-    """
-    if(semestreChoisi=="S1"):
-        for etudiant in ListeEtudiants:
-            moduleEtudiant=etudiant.get_matieres_s1()
-            if moduleDonnee in moduleEtudiant:
-                if cptGroupe <= capaciteGroupe:
-                    cptGroupe=cptGroupe+1
-                    groupe.append(etudiant.get_numetudiant())
-                else :
-                    cptGroupe = 0
-                    listeGroupes.append(groupe)
-                    groupe.clear()
-        listeGroupes.append(groupe)
-    """
 
-    if(semestreChoisi == "S2"):
-                
+    if(semestreChoisi == "S1"):
         for etudiant in ListeEtudiants:
-
-            moduleEtudiant = etudiant.get_matieres_s2()
-            
+            moduleEtudiant = etudiant.get_matieres_s1()
             for moduleConsidere in moduleEtudiant:
-
                 if moduleDonnee == moduleConsidere and cptGroupe < capaciteGroupe:
-                    
-                   cptGroupe = cptGroupe + 1
-                   groupe.append(etudiant.get_numetudiant())
+                    cptGroupe = cptGroupe + 1
+                    groupe.append(etudiant.get_numetudiant())
 
                 elif cptGroupe >= capaciteGroupe:
-
                     cptGroupe = 0
                     listeGroupes.append(groupe.copy())
                     groupe.clear()
                     groupe.append(etudiant.get_numetudiant())
 
-            print(cptGroupe)
-             
+
+    if(semestreChoisi == "S2"):  
+        for etudiant in ListeEtudiants:
+            moduleEtudiant = etudiant.get_matieres_s2()
+            for moduleConsidere in moduleEtudiant:
+                if moduleDonnee == moduleConsidere and cptGroupe < capaciteGroupe:
+                   cptGroupe = cptGroupe + 1
+                   groupe.append(etudiant.get_numetudiant())
+
+                elif cptGroupe >= capaciteGroupe:
+                    cptGroupe = 0
+                    listeGroupes.append(groupe.copy())
+                    groupe.clear()
+                    groupe.append(etudiant.get_numetudiant())
+
     listeGroupes.append(groupe)
 
     return listeGroupes
@@ -344,23 +337,27 @@ def generationTousLesGroupes():
     return listeGroupes
     
 
-
 #Génération de tous les groupes pour tous les modules + Création de la matrice Affectation Groupe x Etudiant
 def creationMatriceAffectation():
 
     listeGroupes=generationTousLesGroupes()
     matriceAffectation=[[],[]]
-
-
-
         
     return listeGroupes
 
+
 #Generation des conditions en fonction des seances
+
+
 
 #Passage de la matrice sous conditions 
 
+
+
 #Passage de la matrice sous conditions
 
+
+
 #Algorithme hongrois
+
 
