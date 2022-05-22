@@ -1,5 +1,5 @@
 # TER
-Ceci est un projet de recherche par Moulhat AHMED, Thivagini SUGUMAR et Julie VARENNE-PAQUET.
+Ceci est un projet de recherche par Moulhat, Thivagini SUGUMAR et Julie VARENNE-PAQUET.
 Il consiste à faire une affectation d'étudiants à des groupes de TD, en fonction de leurs inscriptions à des modules et d'un emploi du temps donné.
 
 ## Pré-requis
