@@ -1,4 +1,4 @@
-from TERProject.BD.Connexion import (connexion,close_connexion)
+from BD.Connexion import (connexion,close_connexion)
 import psycopg2
 
 
@@ -9,8 +9,8 @@ def create_tables():
         sql = open("script.sql","r").read()
         cur.execute(sql)
         conn.commit()
-        #print("Création des tables réalisée avec succès")
-
+        print("Création des tables réalisée avec succès")
+        close_connexion(conn, cur)
     except (Exception, psycopg2.Error) as error:
         print("Erreur lors de la création des tables", error)
 

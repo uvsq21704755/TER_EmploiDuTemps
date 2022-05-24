@@ -1,19 +1,19 @@
 
-from TERProject.BD.Connexion import (connexion,close_connexion)
+from BD.Connexion import (connexion,close_connexion)
 import random
 import psycopg2
-from TERProject.Models.Creneau import Creneau
-from TERProject.Models.Salle import Salle
-from TERProject.Models.Enseignant import Enseignant
-from TERProject.Models.Etudiant import Etudiant
-from TERProject.Models.Formation import Formation
-from TERProject.Models.Matiere import Matiere
-from TERProject.Models.Seance import Seance
-from TERProject.Models.Groupe import Groupe
-from TERProject.BD.Creation_tables import (create_tables,delete_all)
-from TERProject.BD.Insertions import (insertions_bd,insert_groupes)
-from TERProject.BD.Recuperations import (all_students,all_instructor,all_formations,all_modules, all_modules_p1, all_modules_p2, all_creneaux, all_rooms, all_seances,matiere_nb_groupe,matiere_nb_eleves, verif_affectation, seances_etudiant_p1, seances_etudiant_p2, return_groupe_etudiant)
-from TERProject.BD.Modifications import modif_student_inscription
+from Models.Creneau import Creneau
+from Models.Salle import Salle
+from Models.Enseignant import Enseignant
+from Models.Etudiant import Etudiant
+from Models.Formation import Formation
+from Models.Matiere import Matiere
+from Models.Seance import Seance
+from Models.Groupe import Groupe
+from BD.Creation_tables import (create_tables,delete_all)
+from BD.Insertions import (insertions_bd,insert_groupes)
+from BD.Recuperations import (all_students,all_instructor,all_formations,all_modules, all_modules_p1, all_modules_p2, all_creneaux, all_rooms, all_seances,matiere_nb_groupe,matiere_nb_eleves, verif_affectation, seances_etudiant_p1, seances_etudiant_p2, return_groupe_etudiant, etudiants_in_module)
+from BD.Modifications import modif_student_inscription
 
 
 def liste_combinaisons_p1():
@@ -144,6 +144,20 @@ def affectation_etudiants_groupe_p2():
         groupe.set_liste_eleves(liste_etudiants)
 
     return groupes
+def affectation_etudiants_groupe_aleatoire_p1():
+    groupes = creation_groupe_p1()
+    for groupe in groupes:
+        tmp = groupe.get_nbeleves()
+        liste = etudiants_in_module(groupe.get_matiere())
+        eleves = []
+        while tmp > 0:
+            etudiant = random.randint(0,len(liste)-1)
+            if liste[etudiant] not in eleves and verif_affectation(groupe.get_matiere(),etudiant) == False:
+                eleves.append(liste[etudiant])
+                tmp -= 1
+                modif_student_inscription(liste[etudiant], groupe.get_numero(), groupe.get_matiere())
+        groupe.set_liste_eleves(eleves)
+    return groupes
 def conflits1():
     etudiants = all_students()
     liste_conflits = []
@@ -203,6 +217,8 @@ def conflits1():
             add = cpt
             conflit5[len(conflit5) - 1] = add
     return liste_conflits
+
+def conflits2():
     etudiants = all_students()
     liste_conflits = []
     for etudiant in etudiants:
@@ -269,7 +285,7 @@ def calcul_conflits(liste_conflits):
     result = len(liste_conflits)
     return result
 
-def algo():
+def algo1():
     groupes_initiale = affectation_etudiants_groupe_p1()
     liste_conflits = conflits1()
     conflit = calcul_conflits(liste_conflits)
@@ -405,6 +421,239 @@ def algo():
     result.append(memorise_conflits[len(memorise_conflits)-1])
 
     return result
+def algo2():
+    groupes_initiale = affectation_etudiants_groupe_p2()
+    liste_conflits = conflits2()
+    conflit = calcul_conflits(liste_conflits)
+    print("La solution initiale a {} conflits".format(conflit))
+    #groupes_initiale_tmp = groupes_initiale
+    memorise_conflits = []
+    memorise_groupe = []
+    memorise_groupe.append(groupes_initiale)
+    memorise_conflits.append(conflit)
+
+    groupes_deja_vu1 = []
+    for groupe in groupes_initiale:
+        if matiere_nb_groupe(groupe.get_matiere()) == 1:
+            continue
+        for groupe2 in groupes_initiale:
+            if groupe != groupe2 and groupe.get_matiere() == groupe2.get_matiere() and groupe2 not in groupes_deja_vu1:
+                min = groupe.get_nbeleves()
+                if groupe2.get_nbeleves() < min:
+                    min = groupe2.get_nbeleves()
+                liste_grpe1 = []
+                liste_grpe2 = []
+                for etudiant1 in groupe.get_liste_eleves():
+                    liste_grpe1.append(etudiant1)
+                for etudiant2 in groupe2.get_liste_eleves():
+                    liste_grpe2.append(etudiant2)
+                for i in range(0,min-1):
+                    tmp = liste_grpe1[i]
+                    liste_grpe1[i] = liste_grpe2[i]
+                    modif_student_inscription(liste_grpe1[i], groupe.get_numero(), groupe.get_matiere())
+                    liste_grpe2[i] = tmp
+                    modif_student_inscription(liste_grpe2[i], groupe2.get_numero(), groupe.get_matiere())
+                index = groupes_initiale.index(groupe)
+                index2 = groupes_initiale.index(groupe2)
+                groupe.set_liste_eleves(liste_grpe1)
+                groupe2.set_liste_eleves(liste_grpe2)
+                groupes_initiale[index] = groupe
+                groupes_initiale[index2] = groupe2
+                groupes_deja_vu1.append(groupe)
+                groupes_deja_vu1.append(groupe2)
+    liste_conflits2 = conflits2()
+    conflit22 = calcul_conflits(liste_conflits2)
+    print("Pic amélioration : {} conflits".format(conflit22))
+    memorise_groupe.append(groupes_initiale)
+    memorise_conflits.append(conflit22)
 
 
 
+    cpt = 0
+
+    for iteration in range(10):
+        if cpt > 5:
+            break
+        groupes_deja_vu = []
+        for groupe in groupes_initiale:
+            if matiere_nb_groupe(groupe.get_matiere()) == 1:
+                continue
+            for groupe2 in groupes_initiale:
+                if groupe != groupe2 and groupe.get_matiere() == groupe2.get_matiere() and groupe2 not in groupes_deja_vu:
+                    liste1 = []
+                    liste2 = []
+                    liste_grpe1 = []
+                    liste_grpe2 = []
+                    for etudiant1 in groupe.get_liste_eleves():
+                        liste_grpe1.append(etudiant1)
+                    for etudiant2 in groupe2.get_liste_eleves():
+                        liste_grpe2.append(etudiant2)
+
+                    for i in range(12):
+                        n1 = random.randint(0, len(liste_grpe1)-1)
+                        n2 = random.randint(0, len(liste_grpe2)-1)
+                        while liste_grpe1[n1] in liste1:
+                            n1 = random.randint(0, 20)
+                        while liste_grpe2[n2] in liste2:
+                            n2 = random.randint(0, 20)
+                        eleve1 = liste_grpe1[n1]
+                        eleve2 = liste_grpe2[n2]
+                        liste1.append(eleve1)
+                        liste_grpe1.remove(eleve1)
+                        liste2.append(eleve2)
+                        liste_grpe2.remove(eleve2)
+                    for eleve in liste1:
+                        liste_grpe2.append(eleve)
+                        modif_student_inscription(eleve, groupe2.get_numero(), groupe2.get_matiere())
+                    for etudiant in liste2:
+                        liste_grpe1.append(etudiant)
+                        modif_student_inscription(etudiant, groupe.get_numero(), groupe.get_matiere())
+                    index = groupes_initiale.index(groupe)
+                    index2 = groupes_initiale.index(groupe2)
+                    groupe.set_liste_eleves(liste_grpe1)
+                    groupe2.set_liste_eleves(liste_grpe2)
+                    groupes_initiale[index] = groupe
+                    groupes_initiale[index2] = groupe2
+                    #groupes_deja_vu.append(groupe)
+
+                    liste_conflits_new1 = conflits2()
+                    conflit_new1 = calcul_conflits(liste_conflits_new1)
+
+                    if (conflit_new1 < memorise_conflits[len(memorise_conflits) - 1]):
+                        print("Amélioration. Le nouveau conflit est : ", conflit_new1)
+                        memorise_groupe.append(groupes_initiale)
+                        memorise_conflits.append(conflit_new1)
+                    else:
+                        print(" Pas d'amélioration avec ce groupe")
+                        cpt += 1
+                        groupes_initiale = memorise_groupe[len(memorise_groupe) - 1]
+                        for groupe in groupes_initiale:
+                            for eleve5 in groupe.get_liste_eleves():
+                                modif_student_inscription(eleve5, groupe.get_numero(), groupe.get_matiere())
+
+
+        liste_conflits_new = conflits2()
+        conflit_new = calcul_conflits(liste_conflits_new)
+
+        if(conflit_new < memorise_conflits[len(memorise_conflits)-1]):
+            print("Amélioration. Le nouveau conflit est : ", conflit_new)
+            memorise_groupe.append(groupes_initiale)
+            memorise_conflits.append(conflit_new)
+        else:
+            print(" pas d'amélioration")
+            cpt += 20
+            groupes_initiale = memorise_groupe[len(memorise_groupe)-1]
+            for groupe in groupes_initiale:
+                for eleve5 in groupe.get_liste_eleves():
+                    modif_student_inscription(eleve5, groupe.get_numero(), groupe.get_matiere())
+    print("Fin des iterations")
+
+    result = []
+    result.append(memorise_groupe[0])
+    result.append(memorise_conflits[0])
+    result.append((memorise_groupe[1]))
+    result.append(memorise_conflits[1])
+    result.append(memorise_groupe[len(memorise_groupe)-1])
+    result.append(memorise_conflits[len(memorise_conflits)-1])
+
+    return result
+
+def algo1_aleatoire():
+    groupes_initiale = affectation_etudiants_groupe_aleatoire_p1()
+    liste_conflits = conflits1()
+    conflit = calcul_conflits(liste_conflits)
+    print("La solution initiale a {} conflits".format(conflit))
+    #groupes_initiale_tmp = groupes_initiale
+    memorise_conflits = []
+    memorise_groupe = []
+    memorise_groupe.append(groupes_initiale)
+    memorise_conflits.append(conflit)
+
+
+
+    cpt = 0
+
+    for iteration in range(10):
+        if cpt > 5:
+            break
+        groupes_deja_vu = []
+        for groupe in groupes_initiale:
+            if matiere_nb_groupe(groupe.get_matiere()) == 1:
+                continue
+            for groupe2 in groupes_initiale:
+                if groupe != groupe2 and groupe.get_matiere() == groupe2.get_matiere() and groupe2 not in groupes_deja_vu:
+                    liste1 = []
+                    liste2 = []
+                    liste_grpe1 = []
+                    liste_grpe2 = []
+                    for etudiant1 in groupe.get_liste_eleves():
+                        liste_grpe1.append(etudiant1)
+                    for etudiant2 in groupe2.get_liste_eleves():
+                        liste_grpe2.append(etudiant2)
+
+                    for i in range(12):
+                        n1 = random.randint(0, len(liste_grpe1)-1)
+                        n2 = random.randint(0, len(liste_grpe2)-1)
+                        while liste_grpe1[n1] in liste1:
+                            n1 = random.randint(0, 20)
+                        while liste_grpe2[n2] in liste2:
+                            n2 = random.randint(0, 20)
+                        eleve1 = liste_grpe1[n1]
+                        eleve2 = liste_grpe2[n2]
+                        liste1.append(eleve1)
+                        liste_grpe1.remove(eleve1)
+                        liste2.append(eleve2)
+                        liste_grpe2.remove(eleve2)
+                    for eleve in liste1:
+                        liste_grpe2.append(eleve)
+                        modif_student_inscription(eleve, groupe2.get_numero(), groupe2.get_matiere())
+                    for etudiant in liste2:
+                        liste_grpe1.append(etudiant)
+                        modif_student_inscription(etudiant, groupe.get_numero(), groupe.get_matiere())
+                    index = groupes_initiale.index(groupe)
+                    index2 = groupes_initiale.index(groupe2)
+                    groupe.set_liste_eleves(liste_grpe1)
+                    groupe2.set_liste_eleves(liste_grpe2)
+                    groupes_initiale[index] = groupe
+                    groupes_initiale[index2] = groupe2
+                    #groupes_deja_vu.append(groupe)
+
+                    liste_conflits_new1 = conflits1()
+                    conflit_new1 = calcul_conflits(liste_conflits_new1)
+
+                    if (conflit_new1 < memorise_conflits[len(memorise_conflits) - 1]):
+                        print("Amélioration. Le nouveau conflit est : ", conflit_new1)
+                        memorise_groupe.append(groupes_initiale)
+                        memorise_conflits.append(conflit_new1)
+                    else:
+                        print(" Pas d'amélioration avec ce groupe")
+                        cpt += 1
+                        groupes_initiale = memorise_groupe[len(memorise_groupe) - 1]
+                        for groupe in groupes_initiale:
+                            for eleve5 in groupe.get_liste_eleves():
+                                modif_student_inscription(eleve5, groupe.get_numero(), groupe.get_matiere())
+
+
+        liste_conflits_new = conflits1()
+        conflit_new = calcul_conflits(liste_conflits_new)
+
+        if(conflit_new < memorise_conflits[len(memorise_conflits)-1]):
+            print("Amélioration. Le nouveau conflit est : ", conflit_new)
+            memorise_groupe.append(groupes_initiale)
+            memorise_conflits.append(conflit_new)
+        else:
+            print(" pas d'amélioration")
+            cpt += 20
+            groupes_initiale = memorise_groupe[len(memorise_groupe)-1]
+            for groupe in groupes_initiale:
+                for eleve5 in groupe.get_liste_eleves():
+                    modif_student_inscription(eleve5, groupe.get_numero(), groupe.get_matiere())
+    print("Fin des iterations")
+
+    result = []
+    result.append(memorise_groupe[0])
+    result.append(memorise_conflits[0])
+    result.append(memorise_groupe[len(memorise_groupe)-1])
+    result.append(memorise_conflits[len(memorise_conflits)-1])
+
+    return result

@@ -1,13 +1,13 @@
-from TERProject.Models.Creneau import Creneau
-from TERProject.Models.Salle import Salle
-from TERProject.Models.Enseignant import Enseignant
-from TERProject.Models.Etudiant import Etudiant
-from TERProject.Models.Formation import Formation
-from TERProject.Models.Matiere import Matiere
-from TERProject.Models.Seance import Seance
-from TERProject.Models.Groupe import Groupe
+from Models.Creneau import Creneau
+from Models.Salle import Salle
+from Models.Enseignant import Enseignant
+from Models.Etudiant import Etudiant
+from Models.Formation import Formation
+from Models.Matiere import Matiere
+from Models.Seance import Seance
+from Models.Groupe import Groupe
 import psycopg2
-from TERProject.BD.Connexion import (connexion, close_connexion)
+from BD.Connexion import (connexion, close_connexion)
 
 def insert_etudiant(numetudiant,module,groupe):
     try:

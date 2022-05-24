@@ -1,13 +1,13 @@
-from TERProject.BD.Connexion import (connexion,close_connexion)
+from BD.Connexion import (connexion,close_connexion)
 import psycopg2
-from TERProject.Models.Creneau import Creneau
-from TERProject.Models.Salle import Salle
-from TERProject.Models.Enseignant import Enseignant
-from TERProject.Models.Etudiant import Etudiant
-from TERProject.Models.Formation import Formation
-from TERProject.Models.Matiere import Matiere
-from TERProject.Models.Seance import Seance
-from TERProject.Models.Groupe import Groupe
+from Models.Creneau import Creneau
+from Models.Salle import Salle
+from Models.Enseignant import Enseignant
+from Models.Etudiant import Etudiant
+from Models.Formation import Formation
+from Models.Matiere import Matiere
+from Models.Seance import Seance
+from Models.Groupe import Groupe
 
 def all_students():
     try:
@@ -381,3 +381,18 @@ def all_seances_p2():
     #for seance in messeances:
     #    seance.affichage()
     return messeances
+
+def etudiants_in_module(matiere):
+    try:
+        etudiants = []
+        conn = connexion()
+        cur = conn.cursor()
+        sql = "SELECT e.NumEtudiant FROM Etudiant e,Matiere m,inscrit i where e.NumEtudiant = i.NumEtudiant AND i.CodeModule = m.Code  AND m.Code = (%s)"
+        cur.execute(sql, (matiere,))
+        res = cur.fetchall()
+        for tuple in res:
+            etudiants.append(tuple[0])
+        close_connexion(conn, cur)
+    except (Exception, psycopg2.Error) as error:
+        print("Erreur lors de la récuperation des nombre de groupes", error)
+    return etudiants
